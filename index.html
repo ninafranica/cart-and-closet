@@ -6,287 +6,7 @@
 <title>Cart &amp; Closet</title>
 <meta name="description" content="A pre-purchase wardrobe decision tool. Compare what you're about to buy against what you already own — cost per wear, fabric sustainability, and outfit potential. No sign-up, no install, no tracking.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ivory:#F5F3EF;--ink:#1C1B18;--stone:#E8E2D9;--pebble:#D4CDBF;
-  --sage:#9CAF88;--sage-light:#EEF3EA;--sage-mid:#C8D9BE;
-  --terra:#C4865A;--terra-light:#FAF0E8;
-  --slate:#7B8FA6;--slate-light:#EBF0F5;
-  --lav-light:#DED4EE;--lav-mid:#A996C4;--lav-dark:#6F5A91;--lav-bg:#F2EEF8;
-  --muted:#8A8780;--serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
-  --r:10px;
-}
-html,body{height:100%;font-family:var(--sans);background:var(--ivory);color:var(--ink);font-size:14px;line-height:1.5}
-
-.shell{display:grid;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
-.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--stone);background:#fff;flex-wrap:wrap;gap:8px;min-height:56px}
-.wordmark{font-family:var(--serif);font-size:22px;font-weight:300;letter-spacing:.06em;font-style:italic}
-.nav-tabs{display:flex;gap:2px}
-.nav-tab{font-size:12px;padding:6px 16px;border-radius:20px;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:var(--sans);font-weight:400;letter-spacing:.03em;transition:all .15s}
-.nav-tab:hover{color:var(--ink)}
-.nav-tab.active{background:var(--ink);color:#fff}
-.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.btn{font-family:var(--sans);font-size:12px;padding:7px 16px;border-radius:20px;cursor:pointer;font-weight:500;transition:all .15s;letter-spacing:.02em;border:none;white-space:nowrap}
-.btn-primary{background:var(--ink);color:#fff}
-.btn-primary:hover{background:#333}
-.btn-ghost{background:transparent;border:1px solid var(--pebble);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--ink)}
-.btn-sage{background:var(--sage);color:#fff}
-.btn-sage:hover{background:#86a070}
-.btn-danger{background:var(--terra);color:#fff}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-
-.workspace{display:grid;grid-template-columns:260px 1fr 340px;height:100%;overflow:hidden;transition:grid-template-columns .25s ease}
-.workspace.exp-closet{grid-template-columns:1fr 48px 48px}
-.workspace.exp-centre{grid-template-columns:48px 1fr 48px}
-.workspace.exp-right{grid-template-columns:48px 48px 1fr}
-
-.panel,.centre,.right-panel{height:100%;overflow:hidden;display:flex;flex-direction:column}
-.panel{border-right:1px solid var(--stone)}
-.right-panel{border-left:1px solid var(--stone)}
-.panel-head{padding:16px 18px 12px;border-bottom:1px solid var(--stone);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.panel-title{font-family:var(--serif);font-size:17px;font-weight:400;margin-bottom:2px}
-.panel-sub{font-size:11px;color:var(--muted)}
-.panel-body{flex:1;overflow-y:auto;padding:12px}
-.panel-body::-webkit-scrollbar,.cart-body::-webkit-scrollbar,.outfit-canvas::-webkit-scrollbar{width:3px}
-.panel-body::-webkit-scrollbar-thumb,.cart-body::-webkit-scrollbar-thumb,.outfit-canvas::-webkit-scrollbar-thumb{background:var(--stone)}
-.expand-btn{background:none;border:1px solid var(--pebble);border-radius:7px;width:26px;height:26px;flex-shrink:0;cursor:pointer;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center}
-.expand-btn:hover{border-color:var(--ink);color:var(--ink)}
-
-.collapsed-strip{display:none;height:100%;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:16px;gap:10px;cursor:pointer;background:#fff;border-right:1px solid var(--stone)}
-.collapsed-strip:hover{background:var(--ivory)}
-.right-panel.collapsed-strip-wrap{border-left:1px solid var(--stone);border-right:none}
-.collapsed-strip .strip-label{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--serif);font-size:14px;letter-spacing:.04em}
-.collapsed-strip .strip-count{font-size:10px;background:var(--stone);color:var(--muted);border-radius:10px;padding:1px 6px}
-.workspace.exp-closet #panel-centre,
-.workspace.exp-closet #panel-right{display:none}
-.workspace.exp-closet [data-strip="centre"],
-.workspace.exp-closet [data-strip="right"]{display:flex}
-.workspace.exp-centre #panel-closet,
-.workspace.exp-centre #panel-right{display:none}
-.workspace.exp-centre [data-strip="closet"],
-.workspace.exp-centre [data-strip="right"]{display:flex}
-.workspace.exp-right #panel-closet,
-.workspace.exp-right #panel-centre{display:none}
-.workspace.exp-right [data-strip="closet"],
-.workspace.exp-right [data-strip="centre"]{display:flex}
-
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.filter-row input,.filter-row select{font-size:11.5px;padding:6px 9px}
-.filter-row input{flex:1;min-width:110px}
-.filter-row select{flex:1;min-width:0}
-
-.cat-label{font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:8px 4px 6px;margin-top:4px}
-.closet-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:grab;border:1px solid transparent;transition:all .15s;margin-bottom:4px;background:#fff}
-.closet-item:hover{border-color:var(--pebble);background:var(--ivory)}
-.closet-item.dragging{opacity:.4}
-.item-emoji{font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--ivory);border-radius:6px;flex-shrink:0;overflow:hidden}
-.item-emoji img{width:100%;height:100%;object-fit:cover;border-radius:6px}
-.item-info{flex:1;min-width:0}
-.item-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-brand{font-size:11px;color:var(--muted)}
-.item-cpw{font-size:10px;color:var(--sage);font-weight:500}
-.drag-hint{font-size:10px;color:var(--pebble);flex-shrink:0}
-
-.cart-head{padding:16px 22px 12px;border-bottom:1px solid var(--stone);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.cart-body{flex:1;overflow-y:auto;padding:16px 20px}
-
-.wishlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-bottom:20px}
-.wish-card{background:#fff;border:1px solid var(--stone);border-radius:var(--r);overflow:hidden;transition:all .2s;position:relative}
-.wish-card:hover{border-color:var(--pebble);transform:translateY(-1px)}
-.wish-card.selected{border-color:var(--slate);border-width:2px}
-.wish-img{height:120px;background:var(--ivory);display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;overflow:hidden}
-.wish-img img{width:100%;height:100%;object-fit:cover}
-.wish-remove{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.9);border:1px solid var(--pebble);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);transition:all .15s;z-index:2}
-.wish-remove:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
-.wish-compare-toggle{position:absolute;top:6px;left:6px;font-size:9.5px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.9);border:1px solid var(--pebble);cursor:pointer;color:var(--muted);z-index:2}
-.wish-card.selected .wish-compare-toggle{background:var(--slate);color:#fff;border-color:var(--slate)}
-.wish-body{padding:10px 12px 12px}
-.wish-name{font-size:12px;font-weight:500;margin-bottom:1px}
-.wish-brand{font-size:11px;color:var(--muted);margin-bottom:8px}
-.verdict-bar{border-radius:6px;overflow:hidden;margin-bottom:8px}
-.verdict-row{display:flex;align-items:center;gap:6px;padding:3px 0}
-.verdict-label{font-size:10px;color:var(--muted);width:66px;flex-shrink:0}
-.verdict-track{flex:1;height:4px;background:var(--stone);border-radius:2px;overflow:hidden}
-.verdict-fill{height:100%;border-radius:2px;transition:width .5s ease}
-.verdict-score{font-size:10px;font-weight:500;width:24px;text-align:right}
-.overall-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 10px;border-radius:12px;margin-top:2px;background:var(--ivory);color:var(--ink);border:1px solid var(--stone)}
-.wish-price{font-size:11px;color:var(--muted);margin-top:6px}
-.wish-actions{display:flex;gap:6px;margin-top:8px}
-.wish-btn{flex:1;font-size:11px;padding:5px 8px;border-radius:6px;cursor:pointer;border:1px solid var(--pebble);background:#fff;font-family:var(--sans);color:var(--ink);transition:all .15s}
-.wish-btn:hover{background:var(--ivory)}
-.wish-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
-
-.compare-panel{background:#fff;border:1px solid var(--stone);border-radius:var(--r);padding:16px;margin-bottom:16px}
-.compare-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.compare-title{font-family:var(--serif);font-size:15px;font-weight:400}
-.mode-toggle{display:flex;border:1px solid var(--stone);border-radius:20px;overflow:hidden}
-.mode-toggle button{border:none;background:#fff;font-size:11px;padding:5px 13px;cursor:pointer;color:var(--muted);font-family:var(--sans)}
-.mode-toggle button.active{background:var(--ink);color:#fff}
-.compare-grid{display:grid;gap:8px}
-.compare-row{display:grid;grid-template-columns:90px repeat(var(--cols,2),1fr);gap:8px;align-items:center}
-.compare-row.header{margin-bottom:4px}
-.compare-metric{font-size:11px;color:var(--muted)}
-.compare-cell{font-size:12px;font-weight:500;text-align:center}
-.compare-cell.best{color:var(--sage)}
-.compare-cell.worst{color:var(--terra)}
-.compare-divider{height:1px;background:var(--stone);margin:8px 0;grid-column:1/-1}
-.compare-item-name{font-size:11px;color:var(--ink);font-weight:500;text-align:center}
-.compare-select{width:100%;margin-bottom:12px}
-.advisor-note{background:var(--ivory);border-left:3px solid var(--slate);border-radius:0 8px 8px 0;padding:11px 13px;font-size:12px;color:var(--ink);margin-top:10px}
-.advisor-note b{color:var(--slate)}
-
-.add-wish-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border:1.5px dashed var(--pebble);border-radius:var(--r);background:transparent;cursor:pointer;color:var(--muted);font-family:var(--sans);font-size:13px;transition:all .15s;margin-bottom:16px}
-.add-wish-btn:hover{border-color:var(--ink);color:var(--ink)}
-
-.checklist-panel{background:#fff;border:1px solid var(--stone);border-radius:var(--r);padding:16px;margin-bottom:16px}
-.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--stone)}
-.checklist-item:last-child{border-bottom:none}
-.check-name{font-size:12px;font-weight:500;margin-bottom:3px}
-.check-row{display:flex;gap:8px;flex-wrap:wrap}
-.check-tag{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--stone);color:var(--muted)}
-.check-tag.good{border-color:var(--sage-mid);color:var(--sage);background:var(--sage-light)}
-.check-tag.warn{border-color:#e8c4a8;color:var(--terra);background:var(--terra-light)}
-.check-decision{margin-left:auto;flex-shrink:0}
-select.mini{font-size:11px;padding:3px 8px;border:1px solid var(--pebble);border-radius:6px;background:#fff;font-family:var(--sans);color:var(--ink);cursor:pointer}
-
-.right-head{padding:16px 18px 12px;border-bottom:1px solid var(--stone);flex-shrink:0}
-.outfit-canvas{flex:1;overflow-y:auto;padding:14px}
-
-.cpw-calc{background:var(--ivory);border-radius:8px;padding:12px;margin-bottom:10px}
-.cpw-title{font-size:11px;font-weight:500;margin-bottom:8px}
-.cpw-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.cpw-label{font-size:11px;color:var(--muted);flex:1}
-input[type=range]{flex:1;height:3px;accent-color:var(--sage)}
-.cpw-val{font-size:11px;font-weight:500;width:40px;text-align:right}
-.cpw-result{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--stone);margin-top:4px}
-.cpw-result-label{font-size:11px;color:var(--muted)}
-.cpw-result-val{font-family:var(--serif);font-size:18px;font-weight:300}
-.cpw-load{margin-bottom:8px;font-size:11.5px}
-
-.board-wrap{margin-bottom:10px}
-.board{position:relative;min-height:280px;background:var(--ivory);border-radius:8px;border:1.5px dashed var(--pebble);overflow:hidden}
-.board-chip{position:absolute;width:70px;text-align:center;cursor:grab;touch-action:none;user-select:none}
-.board-chip .thumb{width:70px;height:70px;border-radius:8px;background:#fff;border:1px solid var(--stone);overflow:hidden;box-shadow:0 1px 3px rgba(28,27,24,.08);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--pebble)}
-.board-chip .thumb img{width:100%;height:100%;object-fit:cover}
-.board-chip.wishlist-piece .thumb{border-color:var(--slate)}
-.board-chip .label{font-size:10px;margin-top:3px;color:var(--ink);background:#fff;border-radius:4px;padding:1px 3px}
-.board-chip .remove{position:absolute;top:-6px;right:2px;background:var(--terra);color:#fff;border:none;border-radius:50%;width:17px;height:17px;font-size:10px;line-height:1;cursor:pointer}
-.board-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--pebble);font-size:12px;padding:20px}
-.board-footer{display:flex;gap:6px;margin-top:10px;margin-bottom:12px}
-.board-footer input{flex:1;font-size:12px}
-
-.outfit-stats{background:var(--ivory);border-radius:8px;padding:12px;margin-bottom:10px}
-.outfit-stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.outfit-stat-row:last-child{margin-bottom:0}
-.outfit-stat-label{font-size:11px;color:var(--muted)}
-.outfit-stat-val{font-size:12px;font-weight:500}
-.outfit-stat-val.good{color:var(--sage)}
-.outfit-stat-val.warn{color:var(--terra)}
-
-.saved-outfits{margin-top:6px;margin-bottom:12px}
-.saved-outfit-row{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;background:#fff;border:1px solid var(--stone);border-radius:6px;margin-bottom:6px;font-size:11px}
-.saved-outfit-pieces{color:var(--muted)}
-.saved-outfit-row button{flex-shrink:0;font-size:10px;padding:3px 8px}
-
-.sust-card{background:#fff;border:1px solid var(--stone);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.sust-title{font-size:11px;font-weight:500;letter-spacing:.04em;margin-bottom:10px;color:var(--ink)}
-.sust-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.sust-name{font-size:11px;color:var(--muted);width:80px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sust-track{flex:1;height:5px;background:var(--stone);border-radius:2px;overflow:hidden}
-.sust-fill{height:100%;border-radius:2px}
-.sust-pct{font-size:11px;font-weight:500;width:32px;text-align:right}
-.sust-score-ring{width:60px;height:60px;border-radius:50%;border:3px solid var(--sage);display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 8px}
-.sust-score-num{font-family:var(--serif);font-size:20px;font-weight:300;line-height:1}
-.sust-score-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.sust-center{text-align:center}
-
-.modal-back{display:none;position:fixed;inset:0;background:rgba(28,27,24,.4);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);padding:20px}
-.modal-back.open{display:flex}
-.modal{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 16px 60px rgba(0,0,0,.15)}
-.modal.small{width:400px}
-.modal-top{padding:24px 28px 0;display:flex;align-items:flex-start;justify-content:space-between}
-.modal-title{font-family:var(--serif);font-size:22px;font-weight:300}
-.modal-close{font-size:22px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1;padding:0}
-.modal-body{padding:20px 28px 28px}
-.form-label{font-size:10px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:5px;display:block;margin-top:12px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-input[type=text],input[type=number],input[type=url],select,textarea{width:100%;padding:8px 11px;border:1px solid var(--stone);border-radius:7px;font-family:var(--sans);font-size:13px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
-input:focus,select:focus,textarea:focus{border-color:var(--pebble)}
-.upload-zone{border:1.5px dashed var(--pebble);border-radius:8px;padding:18px 20px;text-align:center;cursor:pointer;background:var(--ivory);transition:all .15s;margin-top:4px;position:relative}
-.upload-zone:hover{border-color:var(--ink)}
-.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
-.upload-zone img{max-width:100%;max-height:120px;border-radius:6px}
-.upload-text{font-size:12px;color:var(--muted)}
-.sku-row{display:flex;gap:8px;margin-top:4px}
-.sku-row input{flex:1}
-.fetched-box{background:var(--sage-light);border:1px solid var(--sage-mid);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:11.5px;display:none}
-.fetched-box.show{display:block}
-.fetched-box.error{background:var(--terra-light);border-color:#e8c4a8;color:var(--terra)}
-.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--stone)}
-.fab-row-inputs{display:grid;grid-template-columns:1fr 60px auto;gap:8px;margin-bottom:6px;align-items:center}
-.fab-remove{background:none;border:1px solid var(--stone);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--muted)}
-.fabric-total{font-size:11px;color:var(--muted);margin-top:2px}
-.fabric-total.warn{color:var(--terra);font-weight:500}
-.checkbox-group{display:flex;flex-wrap:wrap;gap:6px}
-.checkbox-chip{border:1px solid var(--stone);border-radius:999px;padding:5px 12px;font-size:11.5px;cursor:pointer;user-select:none;color:var(--muted)}
-.checkbox-chip.checked{background:var(--sage-light);border-color:var(--sage);color:var(--sage);font-weight:500}
-.detail-grid{display:grid;grid-template-columns:110px 1fr;gap:7px 12px;font-size:12.5px;margin-bottom:14px}
-.detail-grid dt{color:var(--muted);font-weight:500}
-.detail-grid dd{margin:0}
-.wear-log-box{background:var(--ivory);border-radius:8px;padding:12px;margin-top:6px}
-.wear-log-box .count{font-family:var(--serif);font-size:26px;font-weight:300;color:var(--sage)}
-
-.demo-banner{background:var(--lav-bg);border:1px solid var(--lav-mid);color:var(--lav-dark);border-radius:var(--r);padding:11px 16px;margin:12px 20px 0 20px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0}
-.demo-banner button{background:none;border:1px solid var(--lav-mid);color:var(--lav-dark);border-radius:14px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:var(--sans);white-space:nowrap}
-
-.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:200;white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden}
-.notif.show{opacity:1}
-
-.page{display:none}
-.page.active{display:contents}
-
-.analytics-wrap{padding:32px 40px;overflow-y:auto;height:100%}
-.analytics-h{font-family:var(--serif);font-size:28px;font-weight:300;margin-bottom:6px}
-.analytics-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
-.stat-tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:24px}
-.stat-tile{background:#fff;border:1px solid var(--stone);border-radius:var(--r);padding:16px}
-.stat-tile .l{font-size:9.5px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.stat-tile .v{font-family:var(--serif);font-size:24px;font-weight:300}
-.stat-tile .s{font-size:10.5px;color:var(--muted);margin-top:2px}
-.analytics-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.analytics-panel{background:#fff;border:1px solid var(--stone);border-radius:var(--r);padding:18px}
-.analytics-panel-title{font-family:var(--serif);font-size:16px;margin-bottom:14px}
-.rank-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.rank-row .rname{width:100px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
-.rank-row .rtrack{flex:1;height:5px;background:var(--stone);border-radius:2px;overflow:hidden}
-.rank-row .rfill{height:100%;border-radius:2px}
-.rank-row .rval{font-size:11px;font-weight:500;width:44px;text-align:right;flex-shrink:0}
-.pie-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-.pie-legend{width:100%}
-.pie-legend-row{display:flex;align-items:center;gap:8px;font-size:11.5px;margin-bottom:6px}
-.pie-swatch{width:11px;height:11px;border-radius:3px;flex-shrink:0}
-.pie-legend-row .name{flex:1;color:var(--ink)}
-.pie-legend-row .pct{font-weight:500}
-
-@media (max-width:980px){
-  .workspace,.workspace.exp-closet,.workspace.exp-centre,.workspace.exp-right{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto;overflow:visible}
-  .shell{height:auto;overflow:visible;grid-template-rows:auto 1fr}
-  .topnav{min-height:56px;padding:10px 16px}
-  html,body{height:auto}
-  .panel,.centre,.right-panel{height:auto;overflow:visible;border:none!important;border-bottom:1px solid var(--stone)!important}
-  .panel-body,.cart-body,.outfit-canvas{overflow:visible;max-height:none}
-  .collapsed-strip{display:none!important}
-  .workspace .panel,.workspace .centre,.workspace .right-panel{display:flex!important}
-  .expand-btn{display:none}
-  .stat-tiles{grid-template-columns:repeat(2,1fr)}
-  .analytics-row{grid-template-columns:1fr}
-  .analytics-wrap{padding:24px 18px}
-  .form-row,.form-row-3{grid-template-columns:1fr}
-}
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="shell">
@@ -304,1105 +24,378 @@ input:focus,select:focus,textarea:focus{border-color:var(--pebble)}
   </nav>
 
   <!-- PLANNER -->
-  <div id="page-planner" class="page active" style="display:contents">
-  <div id="demo-banner" class="demo-banner" style="display:none">
-    <span>You're looking at demo items so the dashboard isn't empty. Clear them whenever you're ready to add your own.</span>
-    <button id="btn-clear-demo">Clear demo data</button>
-  </div>
-  <div class="workspace" id="workspace">
+  <div id="page-planner" class="page active">
+    <div id="demo-banner" class="demo-banner" style="display:none">
+      <span>You're looking at demo items so the dashboard isn't empty. Clear them whenever you're ready to add your own.</span>
+      <button id="btn-clear-demo">Clear demo data</button>
+    </div>
+    <div class="workspace" id="workspace">
 
-    <!-- LEFT: CLOSET -->
-    <div class="panel" id="panel-closet">
-      <div class="panel-head">
-        <div>
-          <div class="panel-title">My Closet</div>
-          <div class="panel-sub" id="closet-count">0 items · drag to outfit builder</div>
+      <!-- LEFT: CLOSET -->
+      <div class="panel" id="panel-closet">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">My Closet</div>
+            <div class="panel-sub" id="closet-count">0 items · drag to outfit builder</div>
+          </div>
+          <button class="expand-btn" data-expand="closet" title="Expand">⤢</button>
         </div>
-        <button class="expand-btn" data-expand="closet" title="Expand">⤢</button>
-      </div>
-      <div style="padding:12px 12px 0 12px">
-        <div class="filter-row">
+        <div class="filters">
           <input type="text" id="closet-search" placeholder="Search your closet…">
+          <div class="filter-grid">
+            <select id="closet-filter-category"></select>
+            <select id="closet-filter-sub"></select>
+            <select id="closet-filter-colour"></select>
+            <select id="closet-filter-season"></select>
+          </div>
+          <div class="filter-meta">
+            <label class="chk"><input type="checkbox" id="closet-show-archived"> Show archived</label>
+            <div class="size-ctl" id="size-ctl"><span>Card size</span>
+              <button data-size="S">S</button><button data-size="M">M</button><button data-size="L">L</button>
+            </div>
+          </div>
         </div>
-        <div class="filter-row">
-          <select id="closet-filter-category"><option value="">All categories</option></select>
-          <select id="closet-filter-color"><option value="">All colors</option></select>
-          <select id="closet-filter-season"><option value="">All seasons</option></select>
+        <div class="panel-body" id="closet-list"></div>
+        <div class="panel-foot">
+          <button class="btn btn-ghost" style="width:100%" id="btn-open-closet">+ Add closet item</button>
         </div>
       </div>
-      <div class="panel-body" id="closet-list"></div>
-      <div style="padding:12px;border-top:1px solid var(--stone)">
-        <button class="btn btn-ghost" style="width:100%;font-size:12px" id="btn-open-closet">+ Add closet item</button>
+      <div class="collapsed-strip" data-strip="closet">
+        <span class="strip-count" id="strip-count-closet">0</span>
+        <span class="strip-label">My Closet</span>
       </div>
-    </div>
-    <div class="collapsed-strip" data-strip="closet">
-      <span class="strip-count" id="strip-count-closet">0</span>
-      <span class="strip-label">My Closet</span>
-    </div>
 
-    <!-- CENTRE: WISHLIST -->
-    <div class="centre" id="panel-centre">
-      <div class="cart-head">
-        <div>
-          <div class="panel-title">Wishlist Cart</div>
-          <div class="panel-sub" id="wish-count">0 items considering</div>
+      <!-- CENTRE: WISHLIST -->
+      <div class="centre" id="panel-centre">
+        <div class="cart-head">
+          <div>
+            <div class="panel-title">Wishlist Cart</div>
+            <div class="panel-sub" id="wish-count">0 items considering</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-compare">Compare</button>
+            <button class="btn btn-ghost btn-sm" id="btn-checklist">Decision list</button>
+            <button class="expand-btn" data-expand="centre" title="Expand">⤢</button>
+          </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <button class="btn btn-ghost" id="btn-compare" style="font-size:11px">Compare</button>
-          <button class="btn btn-ghost" id="btn-checklist" style="font-size:11px">Decision list</button>
-          <button class="expand-btn" data-expand="centre" title="Expand">⤢</button>
-        </div>
-      </div>
-      <div style="padding:16px 20px 0 20px">
-        <div class="filter-row">
+        <div class="filters wide">
           <input type="text" id="wishlist-search" placeholder="Search your wishlist…">
-          <select id="wishlist-filter-category"><option value="">All categories</option></select>
-        </div>
-      </div>
-      <div class="cart-body">
-        <button class="add-wish-btn" id="btn-open-wishlist-2">+ Add wishlist item</button>
-        <div class="wishlist-grid" id="wishlist-grid"></div>
-        <div class="compare-panel" id="compare-panel" style="display:none"></div>
-        <div class="checklist-panel" id="checklist-panel" style="display:none">
-          <div class="compare-title">Decision checklist</div>
-          <div id="checklist-body"></div>
-        </div>
-      </div>
-    </div>
-    <div class="collapsed-strip" data-strip="centre">
-      <span class="strip-count" id="strip-count-centre">0</span>
-      <span class="strip-label">Wishlist Cart</span>
-    </div>
-
-    <!-- RIGHT: OUTFIT BUILDER -->
-    <div class="right-panel" id="panel-right">
-      <div class="right-head" style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div class="panel-title" style="margin-bottom:2px">Outfit Builder</div>
-          <div class="panel-sub">Drag pieces here to test combinations</div>
-        </div>
-        <button class="expand-btn" data-expand="right" title="Expand">⤢</button>
-      </div>
-      <div class="outfit-canvas">
-        <div class="cpw-calc">
-          <div class="cpw-title">Cost-per-wear calculator</div>
-          <select class="cpw-load" id="cpw-item-load"><option value="">Load an item…</option></select>
-          <div class="cpw-row"><span class="cpw-label">Price ($)</span><input type="range" id="cpw-price" min="10" max="800" value="120" step="5"><span class="cpw-val" id="cpw-price-val">$120</span></div>
-          <div class="cpw-row"><span class="cpw-label">Wears / year</span><input type="range" id="cpw-wears" min="1" max="150" value="20"><span class="cpw-val" id="cpw-wears-val">20×</span></div>
-          <div class="cpw-row"><span class="cpw-label">Years owned</span><input type="range" id="cpw-years" min="1" max="10" value="3"><span class="cpw-val" id="cpw-years-val">3 yr</span></div>
-          <div class="cpw-result"><span class="cpw-result-label">Cost per wear</span><span class="cpw-result-val" id="cpw-result">$2.00</span></div>
-        </div>
-
-        <div class="board-wrap">
-          <div class="board" id="outfit-board">
-            <div class="board-empty" id="board-empty">Drag items from your closet or wishlist onto this board to build an outfit.</div>
+          <div class="filter-grid two">
+            <select id="wishlist-filter-category"></select>
+            <select id="wishlist-filter-sub"></select>
           </div>
         </div>
-        <div class="board-footer">
-          <input type="text" id="outfit-name" placeholder="Name this outfit…">
-          <button class="btn btn-ghost" id="btn-clear-board" style="font-size:11px">Clear</button>
-          <button class="btn btn-sage" id="btn-save-outfit" style="font-size:11px">Save</button>
-        </div>
-        <div class="saved-outfits" id="saved-outfits"></div>
-
-        <div class="sust-card">
-          <div class="sust-center">
-            <div class="sust-score-ring" id="sust-ring"><span class="sust-score-num" id="sust-score">—</span><span class="sust-score-label">score</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:12px" id="sust-label">Add closet items to see your fabric breakdown</div>
+        <div class="cart-body">
+          <button class="add-wish-btn" id="btn-open-wishlist-2">+ Add wishlist item</button>
+          <div class="wishlist-grid" id="wishlist-grid"></div>
+          <div class="compare-panel" id="compare-panel" style="display:none"></div>
+          <div class="checklist-panel" id="checklist-panel" style="display:none">
+            <div class="compare-title">Decision checklist</div>
+            <div id="checklist-body"></div>
           </div>
-          <div id="sust-bars"></div>
         </div>
       </div>
+      <div class="collapsed-strip" data-strip="centre">
+        <span class="strip-count" id="strip-count-centre">0</span>
+        <span class="strip-label">Wishlist Cart</span>
+      </div>
+
+      <!-- RIGHT: OUTFIT BUILDER -->
+      <div class="right-panel" id="panel-right">
+        <div class="right-head">
+          <div>
+            <div class="panel-title">Outfit Builder</div>
+            <div class="panel-sub">Drag pieces here to test combinations</div>
+          </div>
+          <button class="expand-btn" data-expand="right" title="Expand">⤢</button>
+        </div>
+        <div class="outfit-canvas">
+          <div class="cpw-calc">
+            <div class="cpw-title">Cost-per-wear calculator</div>
+            <select class="cpw-load" id="cpw-item-load"><option value="">Load an item…</option></select>
+            <div class="cpw-row"><span class="cpw-label">Price</span><input type="range" id="cpw-price" min="10" max="800" value="120" step="5"><span class="cpw-val" id="cpw-price-val">$120</span></div>
+            <div class="cpw-row"><span class="cpw-label">Wears / year</span><input type="range" id="cpw-wears" min="1" max="150" value="20"><span class="cpw-val" id="cpw-wears-val">20×</span></div>
+            <div class="cpw-row"><span class="cpw-label">Years owned</span><input type="range" id="cpw-years" min="1" max="10" value="3"><span class="cpw-val" id="cpw-years-val">3 yr</span></div>
+            <div class="cpw-result"><span class="cpw-result-label">Cost per wear</span><span class="cpw-result-val" id="cpw-result">$2.00</span></div>
+          </div>
+
+          <div class="outfit-main">
+            <div class="board-toolbar">
+              <span class="board-hint">Drag to move · Click to select · Corner handle to resize</span>
+              <label class="chk"><input type="checkbox" id="board-snap"> Snap</label>
+            </div>
+            <div class="board-stage">
+              <div class="board" id="outfit-board">
+                <div class="board-empty" id="board-empty">Drag items from your closet or wishlist onto this canvas to build an outfit.</div>
+              </div>
+            </div>
+            <div class="piece-bar" id="piece-bar" hidden>
+              <span class="piece-name" id="piece-name"></span>
+              <button class="btn btn-ghost btn-xs" data-piece="forward">Bring forward</button>
+              <button class="btn btn-ghost btn-xs" data-piece="back">Send back</button>
+              <button class="btn btn-ghost btn-xs" data-piece="cut" id="piece-cut">Cut-out: on</button>
+              <button class="btn btn-ghost btn-xs" data-piece="remove">Remove</button>
+            </div>
+            <div class="board-footer">
+              <input type="text" id="outfit-name" placeholder="Name this outfit…">
+              <button class="btn btn-ghost btn-sm" id="btn-clear-board">Clear</button>
+              <button class="btn btn-sage btn-sm" id="btn-save-outfit">Save</button>
+            </div>
+            <div id="outfit-stats-slot"></div>
+          </div>
+
+          <div class="saved-wrap">
+            <button class="saved-toggle" id="saved-toggle" aria-expanded="false">
+              <span>Saved outfits <span class="tally" id="outfit-tally">0</span></span><span class="chev">▾</span>
+            </button>
+            <div class="saved-body" id="saved-outfits" hidden></div>
+          </div>
+
+          <div class="sust-card">
+            <div class="sust-center">
+              <div class="sust-score-ring" id="sust-ring"><span class="sust-score-num" id="sust-score">—</span><span class="sust-score-label">score</span></div>
+              <div class="sust-note" id="sust-label">Add closet items to see your fabric breakdown</div>
+            </div>
+            <div id="sust-bars"></div>
+          </div>
+        </div>
+      </div>
+      <div class="collapsed-strip" data-strip="right">
+        <span class="strip-count" id="strip-count-right">0</span>
+        <span class="strip-label">Outfit Builder</span>
+      </div>
     </div>
-    <div class="collapsed-strip" data-strip="right">
-      <span class="strip-count" id="strip-count-right">0</span>
-      <span class="strip-label">Outfit Builder</span>
-    </div>
-  </div>
   </div>
 
   <!-- ANALYTICS -->
-  <div id="page-analytics" class="page" style="display:none">
+  <div id="page-analytics" class="page">
     <div class="analytics-wrap">
-      <div class="analytics-h">Analytics</div>
-      <div class="analytics-sub">Your closet at a glance</div>
+      <div class="analytics-head">
+        <div>
+          <div class="analytics-h">Analytics</div>
+          <div class="analytics-sub">Your closet at a glance</div>
+        </div>
+        <div class="analytics-jump" id="analytics-jump">
+          <button data-jump="sec-composition">Closet Composition</button>
+          <button data-jump="sec-usage">Closet Usage</button>
+          <button data-jump="sec-financial">Financial Breakdown</button>
+        </div>
+      </div>
       <div id="analytics-body"></div>
     </div>
   </div>
 </div>
 
-<!-- ADD/EDIT ITEM MODAL -->
+<!-- ADD / EDIT ITEM -->
 <div class="modal-back" id="modal-form">
-  <div class="modal">
+  <div class="modal modal-lg">
     <div class="modal-top">
       <div class="modal-title" id="form-title">Add to wishlist</div>
       <button class="modal-close" data-close="modal-form">&times;</button>
     </div>
-    <div class="modal-body">
-      <div id="autofill-section" style="display:none">
-        <label class="form-label" style="margin-top:0">Have a product link? Try auto-fill</label>
+    <div class="modal-body" id="form-body">
+
+      <div id="autofill-section" hidden>
+        <label class="form-label first">Have a product link? Try auto-fill</label>
         <div class="sku-row">
           <input type="text" id="autofill-url" placeholder="Paste the product page URL…">
           <button class="btn btn-ghost" id="btn-try-autofill">Fetch</button>
         </div>
-        <div class="fetched-box" id="autofill-msg">Best effort — most retailer sites block this from a browser, so have the details ready to enter by hand.</div>
+        <div class="fetched-box" id="autofill-msg"></div>
       </div>
 
-      <label class="form-label" style="margin-top:0">Photo (optional)</label>
+      <label class="form-label first">Photo (optional)</label>
       <div class="upload-zone" id="photo-drop">
-        <div id="photo-preview"><div class="upload-text">📷 Click or drop a photo here</div></div>
-        <input type="file" id="photo-input" accept="image/*">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">Upload photo: Click or drop a photo here</div>
+        <div class="upload-sub">JPG, PNG, HEIC · tap to browse</div>
+        <input type="file" id="photo-input" accept="image/*,.heic,.heif">
       </div>
-      <button class="btn btn-ghost" style="font-size:11px;margin-top:6px;display:none" id="btn-remove-photo">Remove photo</button>
+      <div id="photo-editor" hidden>
+        <div class="photo-editor-row">
+          <div class="photo-frame" id="photo-frame"><img id="photo-img" alt=""></div>
+          <div class="photo-side">
+            <div class="photo-hint">Drag the photo, or use the arrows, to choose how it's framed on cards and thumbnails. The full photo always shows in the item popup.</div>
+            <div class="arrow-pad">
+              <button type="button" data-nudge="up" title="Move photo up">↑</button>
+              <div class="arrow-mid">
+                <button type="button" data-nudge="left" title="Move photo left">←</button>
+                <button type="button" data-nudge="reset" title="Centre">●</button>
+                <button type="button" data-nudge="right" title="Move photo right">→</button>
+              </div>
+              <button type="button" data-nudge="down" title="Move photo down">↓</button>
+            </div>
+            <div class="photo-btns">
+              <label class="btn btn-ghost btn-xs" style="cursor:pointer">Replace<input type="file" id="photo-replace" accept="image/*,.heic,.heif" style="display:none"></label>
+              <button type="button" class="btn btn-ghost btn-xs" id="btn-remove-photo">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <label class="form-label">Name</label>
+      <label class="form-label">Item name</label>
       <input type="text" id="f-name" placeholder="e.g. Grey wool overcoat">
+
       <div class="form-row">
         <div><label class="form-label">Category</label><select id="f-category"></select></div>
-        <div><label class="form-label">Brand</label><input type="text" id="f-brand"></div>
+        <div><label class="form-label">Sub-category</label><select id="f-subcategory"></select></div>
       </div>
-      <div class="form-row-3">
-        <div><label class="form-label">Price ($)</label><input type="number" id="f-price" min="0" step="0.01" placeholder="0.00"></div>
-        <div><label class="form-label">Size</label><input type="text" id="f-size" placeholder="M, 8…"></div>
-        <div id="f-wears-field"><label class="form-label">Est. wears</label><input type="number" id="f-wears" min="1" step="1"></div>
+      <div id="f-metal-wrap" hidden>
+        <label class="form-label">Metal</label>
+        <select id="f-metal"></select>
       </div>
-      <label class="form-label">Color</label>
-      <select id="f-color"></select>
+
+      <label class="form-label">Brand</label>
+      <input type="text" id="f-brand" placeholder="e.g. Maje">
+
+      <div class="form-row">
+        <div>
+          <label class="form-label">Colour</label>
+          <select id="f-colour"></select>
+        </div>
+        <div>
+          <label class="form-label">Hex code (optional)</label>
+          <div class="hex-wrap"><input type="text" id="f-hex" placeholder="e.g. #C8A2C8" maxlength="7"><span class="hex-swatch" id="f-hex-swatch"></span></div>
+        </div>
+      </div>
+      <div id="f-colour-other" class="subpanel" hidden>
+        <div class="form-row">
+          <div><label class="form-label first">Describe the colour</label><input type="text" id="f-colour-text" placeholder="e.g. Dusty rose"></div>
+          <div><label class="form-label first">Closest parent colour</label><select id="f-colour-parent"></select></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div><label class="form-label">Size</label><input type="text" id="f-size" placeholder="e.g. M, 8, 36"></div>
+        <div><label class="form-label">Length</label><input type="text" id="f-length" placeholder="e.g. Short/Petite, Regular, Tall"></div>
+      </div>
+
+      <label class="form-label">Purchase price</label>
+      <div class="price-row"><input type="number" id="f-price" min="0" step="0.01" placeholder="0.00"><select id="f-currency"></select></div>
+
+      <div id="f-wears-wrap" hidden>
+        <label class="form-label">Est. wears</label>
+        <input type="number" id="f-wears" min="1" step="1">
+      </div>
+
+      <label class="form-label">Original price</label>
+      <div class="price-row"><input type="number" id="f-oprice" min="0" step="0.01" placeholder="0.00"><select id="f-ocurrency"></select></div>
+
+      <div class="form-row">
+        <div><label class="form-label">Source</label><select id="f-source"></select></div>
+        <div><label class="form-label">Second-hand</label><select id="f-secondhand"></select></div>
+      </div>
+
+      <label class="form-label">Purchase location</label>
+      <input type="text" id="f-location" placeholder="e.g. Aritzia, Depop, Gift from Mom">
+
+      <div class="owned-only">
+        <div class="form-row">
+          <div>
+            <label class="form-label">Date acquired</label>
+            <input type="date" id="f-acquired">
+            <div class="date-caption" id="f-acquired-cap"></div>
+          </div>
+          <div>
+            <label class="form-label">Times worn</label>
+            <input type="number" id="f-timesworn" min="0" step="1" placeholder="Before using the app">
+          </div>
+        </div>
+        <label class="form-label">Sold / donated date</label>
+        <input type="date" id="f-sold">
+        <div class="date-caption" id="f-sold-cap">Setting a date archives the item.</div>
+
+        <div class="form-row">
+          <div>
+            <label class="form-label">Tailored / service care date</label>
+            <input type="date" id="f-tailor-date">
+            <div class="date-caption" id="f-tailor-date-cap"></div>
+          </div>
+          <div>
+            <label class="form-label">Cost of tailoring / service care</label>
+            <div class="price-row"><input type="number" id="f-tailor-cost" min="0" step="0.01" placeholder="0.00"><select id="f-tailor-currency"></select></div>
+          </div>
+        </div>
+      </div>
+
       <label class="form-label">Season</label>
       <div class="checkbox-group" id="f-season-group"></div>
 
       <label class="form-label">Fabric composition</label>
       <div id="fabric-rows"></div>
-      <button class="btn btn-ghost" style="font-size:11px" id="btn-add-fabric-row">+ Add fabric</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="btn-add-fabric-row">+ Add fabric</button>
       <div class="fabric-total" id="fabric-total">Total: 0%</div>
 
-      <label class="form-label">Product link (optional)</label>
+      <label class="form-label">Product URL (optional)</label>
       <input type="text" id="f-url" placeholder="https://…">
-      <label class="form-label">Notes</label>
-      <textarea id="f-notes" rows="2" placeholder="Anything worth remembering"></textarea>
+      <label class="form-label">SKU # (optional)</label>
+      <input type="text" id="f-sku" placeholder="e.g. 122475">
+
+      <label class="form-label">Notes on product info</label>
+      <div class="rte-toolbar" id="rte-toolbar">
+        <button type="button" data-cmd="bold" title="Bold"><b>B</b></button>
+        <button type="button" data-cmd="italic" title="Italic"><i>I</i></button>
+        <button type="button" data-cmd="underline" title="Underline"><u>U</u></button>
+        <span class="sep"></span>
+        <button type="button" data-cmd="insertUnorderedList" title="Bullet list">• List</button>
+        <button type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+        <span class="sep"></span>
+        <button type="button" data-cmd="removeFormat" title="Clear formatting">Clear</button>
+      </div>
+      <div class="rte" id="f-notes" contenteditable="true" data-placeholder="Anything worth remembering — spacing and bullets are kept"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" data-close="modal-form">Cancel</button>
-      <button class="btn btn-primary" id="btn-save-item">Save</button>
+      <button class="btn btn-primary" id="btn-save-item">Add item</button>
     </div>
   </div>
 </div>
 
-<!-- ITEM DETAIL MODAL -->
+<!-- ITEM DETAIL -->
 <div class="modal-back" id="modal-detail">
-  <div class="modal">
+  <div class="modal modal-lg">
     <div class="modal-top"><div class="modal-title" id="detail-title">Item</div><button class="modal-close" data-close="modal-detail">&times;</button></div>
     <div class="modal-body" id="detail-body"></div>
     <div class="modal-footer" id="detail-footer"></div>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- CURRENCY SETTINGS -->
+<div class="modal-back" id="modal-settings">
+  <div class="modal">
+    <div class="modal-top"><div class="modal-title">Currency settings</div><button class="modal-close" data-close="modal-settings">&times;</button></div>
+    <div class="modal-body" id="settings-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-close="modal-settings">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-settings">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
 <div class="modal-back" id="modal-confirm">
   <div class="modal small">
     <div class="modal-top"><div class="modal-title" id="confirm-title" style="font-size:19px">Are you sure?</div><button class="modal-close" data-close="modal-confirm">&times;</button></div>
-    <div class="modal-body" style="padding-top:6px"><p id="confirm-body" style="font-size:13px;color:var(--muted)"></p></div>
+    <div class="modal-body" style="padding-top:8px"><p id="confirm-body" class="confirm-text"></p></div>
     <div class="modal-footer"><button class="btn btn-ghost" data-close="modal-confirm">Cancel</button><button class="btn btn-danger" id="confirm-ok">Confirm</button></div>
   </div>
 </div>
 
 <div class="notif" id="notif"></div>
 
-<script>
-(function(){
-
-var CATEGORIES=["Tops","Bottoms","Dresses & Jumpsuits","Sweaters & Knits","Outerwear","Shoes","Bags","Accessories","Activewear","Formalwear"];
-var COLORS=["Black","White","Grey","Beige / Tan","Brown","Navy","Blue","Green","Yellow","Orange","Red","Pink","Purple","Multicolor / Print"];
-var SEASONS=["Spring","Summer","Fall","Winter","All-season"];
-var CATEGORY_ICON={"Tops":"👕","Bottoms":"👖","Dresses & Jumpsuits":"👗","Sweaters & Knits":"🧶","Outerwear":"🧥","Shoes":"👟","Bags":"👜","Accessories":"🧣","Activewear":"🩳","Formalwear":"🤵"};
-var CATEGORY_WEAR_DEFAULT={"Tops":30,"Bottoms":40,"Dresses & Jumpsuits":15,"Sweaters & Knits":35,"Outerwear":80,"Shoes":100,"Bags":150,"Accessories":50,"Activewear":60,"Formalwear":8};
-
-var FABRIC_DATA={
-  "Hemp":{score:95,tier:"Excellent",type:"natural",note:"Needs no pesticides or extra irrigation; carbon-negative to grow."},
-  "Organic Hemp":{score:96,tier:"Excellent",type:"natural",note:"Same low-input crop as hemp, grown without any synthetic inputs."},
-  "Linen / Flax":{score:93,tier:"Excellent",type:"natural",note:"Grows on rainfall alone; the whole plant is used, with almost no waste."},
-  "TENCEL™ / Lyocell (branded)":{score:92,tier:"Excellent",type:"semi",note:"Closed-loop process recovers ~99% of solvents; FSC-certified wood source."},
-  "Lyocell (generic)":{score:85,tier:"Excellent",type:"semi",note:"Similar process to TENCEL but without the certified sourcing guarantee."},
-  "Alpaca Wool":{score:88,tier:"Excellent",type:"natural",note:"Soft-footed grazers that don't degrade land; far higher fiber yield per animal than cashmere goats."},
-  "Yak Wool":{score:86,tier:"Excellent",type:"natural",note:"Grazes at high altitude on leaves only, gentler on land than cashmere goats."},
-  "Camel Hair":{score:85,tier:"Excellent",type:"natural",note:"Collected from natural shedding, not shearing; usually left undyed."},
-  "Piñatex (pineapple leaf)":{score:82,tier:"Good",type:"natural",note:"Made from a farm byproduct; needs no extra land, water or pesticides."},
-  "Mycelium Leather":{score:85,tier:"Excellent",type:"natural",note:"Grown from mushroom roots — animal-free and plastic-free."},
-  "Jute":{score:80,tier:"Good",type:"natural",note:"Typically grown without pesticides or fertilizer; very durable."},
-  "Bamboo (mechanical / lyocell process)":{score:78,tier:"Good",type:"semi",note:"Fast-growing, low-input crop — but only when processed mechanically or as lyocell, not standard bamboo rayon."},
-  "Organic Cotton":{score:78,tier:"Good",type:"natural",note:"~60% less energy and ~45% less CO2 than conventional cotton, per GOTS/BCI data."},
-  "Merino Wool (mulesing-free)":{score:74,tier:"Good",type:"natural",note:"Fine, soft wool; biodegradable, with humane shearing practices when certified."},
-  "Responsible Wool (RWS)":{score:75,tier:"Good",type:"natural",note:"Certified for animal welfare and land management standards."},
-  "Coir (coconut fiber)":{score:68,tier:"Good",type:"natural",note:"Byproduct of coconut processing; biological retting, low chemical input."},
-  "Recycled Cotton":{score:70,tier:"Good",type:"natural",note:"Lower water and land footprint than virgin cotton, though fibers are shorter and often blended."},
-  "Wool (conventional)":{score:62,tier:"Middling",type:"natural",note:"Biodegradable and durable, but shearing and land-use practices vary widely by farm."},
-  "Modal":{score:60,tier:"Middling",type:"semi",note:"Beech-pulp fiber, less chemically intensive than viscose but still solvent-dependent."},
-  "Down (RDS certified)":{score:55,tier:"Middling",type:"natural",note:"Certified to exclude live-plucking, but still an animal byproduct."},
-  "Leather (vegetable-tanned)":{score:55,tier:"Middling",type:"semi",note:"Biodegradable tanning method, but a much slower, pricier process — rare in mainstream retail."},
-  "Conventional Cotton":{score:45,tier:"Middling",type:"natural",note:"Biodegradable, but can take over 2,700 liters of water per t-shirt and heavy pesticide use."},
-  "Cupro":{score:40,tier:"Middling",type:"semi",note:"Silky feel from cotton linter waste, but processed with hazardous solvents."},
-  "Mohair":{score:40,tier:"Middling",type:"natural",note:"Durable natural fiber; animal welfare practices vary significantly by farm."},
-  "Silk":{score:38,tier:"Middling",type:"natural",note:"Biodegradable and strong, but conventional production boils live silkworm pupae and is chemically finished."},
-  "Bamboo Rayon (unspecified process)":{score:38,tier:"Middling",type:"semi",note:"Most \"bamboo\" fabric is actually rayon made with harsh chemicals despite the eco-sounding name."},
-  "Acetate":{score:35,tier:"Middling",type:"semi",note:"Smooth, silk-like synthetic-cellulose blend; processed with acetic acid and acetone."},
-  "Cashmere":{score:35,tier:"Middling",type:"natural",note:"Very low yield per animal; overgrazing has driven land degradation in key sourcing regions."},
-  "Leather (conventional)":{score:30,tier:"Poor",type:"natural",note:"Chrome tanning uses carcinogenic chemicals and the hide is non-biodegradable; tied to cattle-driven deforestation."},
-  "Viscose / Rayon (conventional)":{score:32,tier:"Poor",type:"semi",note:"Heavy use of carbon disulfide and sulfuric acid; a notable source of ocean microfiber pollution."},
-  "Down (conventional)":{score:35,tier:"Poor",type:"natural",note:"Live-plucking is documented and legal in some of the largest supplier countries."},
-  "Recycled Polyester (rPET)":{score:45,tier:"Middling",type:"synthetic",note:"Diverts plastic bottles from landfill, but still sheds microplastics like virgin polyester."},
-  "Recycled Nylon":{score:42,tier:"Middling",type:"synthetic",note:"Lower footprint than virgin nylon, but end-of-life recyclability is still limited."},
-  "Nylon / Polyamide":{score:20,tier:"Poor",type:"synthetic",note:"Produces nitrous oxide during manufacture; very difficult to recycle."},
-  "Elastane / Spandex / Lycra":{score:15,tier:"Very Poor",type:"synthetic",note:"Petroleum-based stretch fiber, rarely used alone, that degrades quickly and isn't recyclable."},
-  "Polyester":{score:18,tier:"Very Poor",type:"synthetic",note:"~80% of all synthetic fiber produced; roughly double the energy and triple the CO2 of cotton to make."},
-  "Acrylic":{score:12,tier:"Very Poor",type:"synthetic",note:"Made from a probable-carcinogen precursor chemical; sheds the most microplastic fiber of any common fabric."},
-  "Angora":{score:20,tier:"Very Poor",type:"natural",note:"Widely documented welfare concerns in mass rabbit-fur production."},
-  "Fur":{score:10,tier:"Very Poor",type:"natural",note:"The vast majority comes from animals factory-farmed solely for pelts."}
-};
-var FABRIC_LIST=Object.keys(FABRIC_DATA).sort();
-
-var STORAGE_KEY="cartAndClosetState_v2";
-var state={closet:[],wishlist:[],outfits:[],isDemo:false,compareMode:"wishlist",compareSelection:[],compareClosetId:""};
-
-function uid(){return "id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);}
-
-function demoSeed(){
-  return {
-    closet:[
-      {id:uid(),name:"Linen Shirt",category:"Tops",brand:"Everlane",price:88,size:"M",color:"White",season:["Summer","Spring"],fabric:[{fiber:"Linen / Flax",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:30,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(24).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Wide Leg Trousers",category:"Bottoms",brand:"COS",price:135,size:"34",color:"Beige / Tan",season:["All-season"],fabric:[{fiber:"Wool (conventional)",percent:60},{fiber:"Polyester",percent:40}],photo:null,sourceUrl:"",notes:"",estimatedWears:40,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(18).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Trench Coat",category:"Outerwear",brand:"Sandro",price:420,size:"S",color:"Beige / Tan",season:["Fall","Spring"],fabric:[{fiber:"Conventional Cotton",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:80,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(30).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Silk Slip Dress",category:"Dresses & Jumpsuits",brand:"Reformation",price:248,size:"4",color:"Pink",season:["Summer"],fabric:[{fiber:"Silk",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:15,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(8).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Leather Loafers",category:"Shoes",brand:"Madewell",price:168,size:"7.5",color:"Brown",season:["All-season"],fabric:[{fiber:"Leather (conventional)",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:100,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(45).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Cashmere Turtleneck",category:"Sweaters & Knits",brand:"Quince",price:90,size:"S",color:"Beige / Tan",season:["Winter"],fabric:[{fiber:"Cashmere",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:35,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(22).fill(0).map(function(){return new Date().toISOString();})},
-      {id:uid(),name:"Nylon Puffer",category:"Outerwear",brand:"Uniqlo",price:79,size:"M",color:"Green",season:["Winter"],fabric:[{fiber:"Nylon / Polyamide",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:80,status:"closet",dateAdded:new Date().toISOString(),wearLog:new Array(35).fill(0).map(function(){return new Date().toISOString();})}
-    ],
-    wishlist:[
-      {id:uid(),name:"Merino Cardigan",category:"Sweaters & Knits",brand:"Aritzia",price:148,size:"S",color:"Beige / Tan",season:["Fall","Winter"],fabric:[{fiber:"Merino Wool (mulesing-free)",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:35,status:"wishlist",dateAdded:new Date().toISOString(),wearLog:[],decision:""},
-      {id:uid(),name:"Satin Midi Skirt",category:"Bottoms",brand:"& Other Stories",price:89,size:"S",color:"Yellow",season:["Summer"],fabric:[{fiber:"Polyester",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:40,status:"wishlist",dateAdded:new Date().toISOString(),wearLog:[],decision:""},
-      {id:uid(),name:"White Leather Sneakers",category:"Shoes",brand:"Common Projects",price:410,size:"9",color:"White",season:["All-season"],fabric:[{fiber:"Leather (conventional)",percent:100}],photo:null,sourceUrl:"",notes:"",estimatedWears:100,status:"wishlist",dateAdded:new Date().toISOString(),wearLog:[],decision:""}
-    ],
-    outfits:[],
-    isDemo:true,compareMode:"wishlist",compareSelection:[],compareClosetId:""
-  };
-}
-
-function loadState(){
-  try{
-    var raw=localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      state=Object.assign({closet:[],wishlist:[],outfits:[],isDemo:false,compareMode:"wishlist",compareSelection:[],compareClosetId:""},JSON.parse(raw));
-    }else{
-      state=demoSeed();
-      saveState();
-    }
-  }catch(e){state=demoSeed();}
-}
-function saveState(){
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
-  catch(e){notify("Storage is full — export a backup and remove a few photos.");}
-}
-
-function notify(msg){var n=document.getElementById("notif");n.textContent=msg;n.classList.add("show");clearTimeout(notify._t);notify._t=setTimeout(function(){n.classList.remove("show");},2800);}
-
-function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-function fmtMoney(n){return "$"+(Math.round((n||0)*100)/100).toFixed(2);}
-function allItems(){return state.closet.concat(state.wishlist);}
-function findItem(id){return allItems().find(function(i){return i.id===id;});}
-
-/* ---------- scoring ---------- */
-function pctByType(item,type){
-  if(!item.fabric||!item.fabric.length)return 0;
-  return item.fabric.filter(function(f){var d=FABRIC_DATA[f.fiber];return d&&d.type===type;}).reduce(function(a,f){return a+(f.percent||0);},0);
-}
-function computeSustainability(fabric){
-  if(!fabric||!fabric.length)return null;
-  var totalPct=0,weighted=0;
-  fabric.forEach(function(f){var d=FABRIC_DATA[f.fiber];if(d){weighted+=d.score*f.percent;totalPct+=f.percent;}});
-  if(totalPct===0)return null;
-  var score=Math.round(weighted/totalPct);
-  var tier=score>=80?"Excellent":score>=60?"Good":score>=45?"Middling":score>=25?"Poor":"Very Poor";
-  return {score:score,tier:tier};
-}
-function dominantFabricNote(fabric){
-  if(!fabric||!fabric.length)return "";
-  var top=fabric.slice().sort(function(a,b){return b.percent-a.percent;})[0];
-  var d=FABRIC_DATA[top.fiber];
-  return d?d.note:"";
-}
-function costPerWear(item){
-  if(item.status==="closet"){
-    var wears=(item.wearLog||[]).length;
-    if(wears>0)return item.price/wears;
-  }
-  return item.price/(item.estimatedWears||CATEGORY_WEAR_DEFAULT[item.category]||30);
-}
-function outfitCount(items){
-  var tops=items.filter(function(i){return i.category==="Tops"||i.category==="Sweaters & Knits";}).length;
-  var bottoms=items.filter(function(i){return i.category==="Bottoms";}).length;
-  var dresses=items.filter(function(i){return i.category==="Dresses & Jumpsuits";}).length;
-  var shoes=items.filter(function(i){return i.category==="Shoes";}).length;
-  return (tops*bottoms+dresses)*Math.max(shoes,1);
-}
-function scoreItem(item){
-  var sus=computeSustainability(item.fabric);
-  var fabScore=sus?sus.score:50;
-  var cpw=costPerWear(item);
-  var cpwScore=Math.round(Math.max(0,Math.min(100,100-(cpw-1)*8)));
-  var before=outfitCount(state.closet);
-  var after=outfitCount(state.closet.concat([item]));
-  var unlocked=Math.max(after-before,0);
-  var outfitScore=Math.round(Math.min(100,unlocked*25));
-  var total=Math.round(fabScore*0.4+cpwScore*0.35+outfitScore*0.25);
-  return {fabScore:fabScore,cpwScore:cpwScore,outfitScore:outfitScore,total:total,unlocked:unlocked};
-}
-
-/* ---------- init selects ---------- */
-function populateSelect(sel,options,placeholder){
-  sel.innerHTML="";
-  if(placeholder){var o=document.createElement("option");o.value="";o.textContent=placeholder;sel.appendChild(o);}
-  options.forEach(function(v){var o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o);});
-}
-function initFilters(){
-  populateSelect(document.getElementById("closet-filter-category"),CATEGORIES,"All categories");
-  populateSelect(document.getElementById("closet-filter-color"),COLORS,"All colors");
-  populateSelect(document.getElementById("closet-filter-season"),SEASONS,"All seasons");
-  populateSelect(document.getElementById("wishlist-filter-category"),CATEGORIES,"All categories");
-}
-
-/* ---------- CLOSET render ---------- */
-function itemThumb(item){
-  return item.photo?'<img src="'+item.photo+'" alt="">':(CATEGORY_ICON[item.category]||"👚");
-}
-function renderCloset(){
-  var q=document.getElementById("closet-search").value.toLowerCase();
-  var cat=document.getElementById("closet-filter-category").value;
-  var color=document.getElementById("closet-filter-color").value;
-  var season=document.getElementById("closet-filter-season").value;
-  var items=state.closet.filter(function(i){
-    if(cat&&i.category!==cat)return false;
-    if(color&&i.color!==color)return false;
-    if(season&&(i.season||[]).indexOf(season)===-1)return false;
-    if(q&&(i.name||"").toLowerCase().indexOf(q)===-1&&(i.brand||"").toLowerCase().indexOf(q)===-1)return false;
-    return true;
-  });
-  var el=document.getElementById("closet-list");
-  if(!state.closet.length){
-    el.innerHTML='<div style="text-align:center;padding:30px 10px;color:var(--muted)"><div style="font-size:24px;margin-bottom:8px">🧺</div><div style="font-size:12px;font-style:italic">Your closet is empty</div><div style="font-size:11px;margin-top:4px">Add items with the button below</div></div>';
-  }else if(!items.length){
-    el.innerHTML='<div style="text-align:center;padding:30px 10px;color:var(--muted);font-size:12px">No items match your filters.</div>';
-  }else{
-    var cats=[];
-    items.forEach(function(i){if(cats.indexOf(i.category)===-1)cats.push(i.category);});
-    el.innerHTML=cats.map(function(c){
-      var list=items.filter(function(i){return i.category===c;});
-      return '<div class="cat-label">'+escapeHtml(c)+'</div>'+list.map(function(item){
-        var wears=(item.wearLog||[]).length;
-        return '<div class="closet-item" draggable="true" data-drag-id="'+item.id+'" data-id="'+item.id+'">'+
-          '<div class="item-emoji">'+itemThumb(item)+'</div>'+
-          '<div class="item-info"><div class="item-name">'+escapeHtml(item.name)+'</div><div class="item-brand">'+escapeHtml(item.brand||"")+'</div>'+
-          (wears>0?'<div class="item-cpw">'+fmtMoney(item.price/wears)+'/wear</div>':'')+
-          '</div><div class="drag-hint">⋮⋮</div></div>';
-      }).join("");
-    }).join("");
-  }
-  document.getElementById("closet-count").textContent=state.closet.length+" items · drag to outfit builder";
-  document.getElementById("strip-count-closet").textContent=state.closet.length;
-  renderSustainability();
-}
-
-/* ---------- WISHLIST render ---------- */
-function renderWishlist(){
-  var q=document.getElementById("wishlist-search").value.toLowerCase();
-  var cat=document.getElementById("wishlist-filter-category").value;
-  var items=state.wishlist.filter(function(i){
-    if(cat&&i.category!==cat)return false;
-    if(q&&(i.name||"").toLowerCase().indexOf(q)===-1&&(i.brand||"").toLowerCase().indexOf(q)===-1)return false;
-    return true;
-  });
-  document.getElementById("wish-count").textContent=state.wishlist.length+" item"+(state.wishlist.length!==1?"s":"")+" considering";
-  document.getElementById("strip-count-centre").textContent=state.wishlist.length;
-  var el=document.getElementById("wishlist-grid");
-  if(!items.length){el.innerHTML=state.wishlist.length?'<div style="color:var(--muted);font-size:12px;grid-column:1/-1">No items match your filters.</div>':"";return;}
-  el.innerHTML=items.map(function(item){
-    var s=scoreItem(item);
-    var selected=state.compareSelection.indexOf(item.id)>-1;
-    return '<div class="wish-card'+(selected?" selected":"")+'" draggable="true" data-drag-id="'+item.id+'" data-id="'+item.id+'">'+
-      '<div class="wish-img">'+itemThumb(item)+
-        '<div class="wish-compare-toggle" data-toggle-compare="'+item.id+'">'+(selected?"✓ compare":"+ compare")+'</div>'+
-        '<div class="wish-remove" data-remove-wish="'+item.id+'">&times;</div>'+
-      '</div>'+
-      '<div class="wish-body">'+
-        '<div class="wish-brand">'+escapeHtml(item.brand||"")+'</div>'+
-        '<div class="wish-name">'+escapeHtml(item.name)+'</div>'+
-        '<div class="verdict-bar">'+
-          verdictRow("Sustainability",s.fabScore,s.fabScore>=60?"var(--sage)":"var(--terra)")+
-          verdictRow("Cost/wear",s.cpwScore,"var(--slate)")+
-          verdictRow("Outfit value",s.outfitScore,"var(--pebble)")+
-        '</div>'+
-        '<span class="overall-chip">'+s.total+'/100 overall</span>'+
-        '<div class="wish-price">'+fmtMoney(item.price)+' · ~'+fmtMoney(costPerWear(item))+'/wear est.</div>'+
-        '<div class="wish-actions">'+
-          '<button class="wish-btn" data-purchase="'+item.id+'">→ Move to closet</button>'+
-          '<button class="wish-btn primary" data-try-outfit="'+item.id+'">Try on</button>'+
-        '</div>'+
-      '</div></div>';
-  }).join("");
-}
-function verdictRow(label,score,color){
-  return '<div class="verdict-row"><span class="verdict-label">'+label+'</span><div class="verdict-track"><div class="verdict-fill" style="width:'+score+'%;background:'+color+'"></div></div><span class="verdict-score" style="color:'+color+'">'+score+'</span></div>';
-}
-
-/* ---------- COMPARE ---------- */
-function renderCompare(){
-  var panel=document.getElementById("compare-panel");
-  var toggleHtml='<div class="mode-toggle"><button data-mode="wishlist" class="'+(state.compareMode==="wishlist"?"active":"")+'">vs Wishlist</button><button data-mode="closet" class="'+(state.compareMode==="closet"?"active":"")+'">vs Closet</button></div>';
-  if(state.compareMode==="wishlist"){
-    var items=state.compareSelection.map(findItem).filter(Boolean).slice(0,3);
-    if(items.length<2){
-      panel.innerHTML='<div class="compare-title-row"><div class="compare-title">Side-by-side comparison</div>'+toggleHtml+'</div><div style="font-size:12px;color:var(--muted)">Select 2–3 wishlist items with the "+ compare" tag on each card to compare them here.</div>';
-    }else{
-      var scores=items.map(scoreItem);
-      var cols=items.length;
-      function bestWorst(arr,key){return {best:Math.max.apply(null,arr.map(function(x){return x[key];})),worst:Math.min.apply(null,arr.map(function(x){return x[key];}))};}
-      var fab=bestWorst(scores,"fabScore"),cpwb=bestWorst(scores,"cpwScore"),outb=bestWorst(scores,"outfitScore");
-      panel.innerHTML='<div class="compare-title-row"><div class="compare-title">Side-by-side comparison</div>'+toggleHtml+'</div>'+
-        '<div class="compare-grid" style="--cols:'+cols+'">'+
-        '<div class="compare-row header"><span></span>'+items.map(function(i){return '<span class="compare-item-name">'+escapeHtml(i.name)+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Price</span>'+items.map(function(i){return '<span class="compare-cell">'+fmtMoney(i.price)+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Cost/wear</span>'+items.map(function(i){return '<span class="compare-cell">'+fmtMoney(costPerWear(i))+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row compare-divider"></div>'+
-        '<div class="compare-row"><span class="compare-metric">Sustainability</span>'+scores.map(function(s){return '<span class="compare-cell '+(s.fabScore===fab.best?"best":s.fabScore===fab.worst?"worst":"")+'">'+s.fabScore+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Cost/wear score</span>'+scores.map(function(s){return '<span class="compare-cell '+(s.cpwScore===cpwb.best?"best":s.cpwScore===cpwb.worst?"worst":"")+'">'+s.cpwScore+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Outfit value</span>'+scores.map(function(s){return '<span class="compare-cell '+(s.outfitScore===outb.best?"best":s.outfitScore===outb.worst?"worst":"")+'">'+s.outfitScore+'</span>';}).join("")+'</div>'+
-        '</div>';
-    }
-  }else{
-    var wOpts='<option value="">Choose a wishlist item…</option>'+state.wishlist.map(function(i){return '<option value="'+i.id+'"'+(i.id===state.compareClosetId?" selected":"")+'>'+escapeHtml(i.name)+'</option>';}).join("");
-    var candidate=findItem(state.compareClosetId);
-    var body="";
-    if(candidate){
-      var matches=state.closet.filter(function(i){return i.category===candidate.category;}).slice(0,3);
-      var cols=[candidate].concat(matches);
-      body='<div class="compare-grid" style="--cols:'+cols.length+'">'+
-        '<div class="compare-row header"><span></span>'+cols.map(function(i,idx){return '<span class="compare-item-name">'+(idx===0?"🛒 ":"")+escapeHtml(i.name)+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Price</span>'+cols.map(function(i){return '<span class="compare-cell">'+fmtMoney(i.price)+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Cost/wear</span>'+cols.map(function(i){return '<span class="compare-cell">'+fmtMoney(costPerWear(i))+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Sustainability</span>'+cols.map(function(i){var s=computeSustainability(i.fabric);return '<span class="compare-cell">'+(s?s.tier+" ("+s.score+")":"—")+'</span>';}).join("")+'</div>'+
-        '<div class="compare-row"><span class="compare-metric">Top fabric</span>'+cols.map(function(i){var f=(i.fabric||[]).slice().sort(function(a,b){return b.percent-a.percent;})[0];return '<span class="compare-cell">'+(f?f.fiber+" "+f.percent+"%":"—")+'</span>';}).join("")+'</div>'+
-        '</div>';
-      var sus=computeSustainability(candidate.fabric);
-      var s=scoreItem(candidate);
-      var note='<b>'+escapeHtml(candidate.name)+'</b> comes in at '+fmtMoney(costPerWear(candidate))+' per wear, assuming '+(candidate.estimatedWears||CATEGORY_WEAR_DEFAULT[candidate.category])+' wears. ';
-      note+=matches.length?("You already own "+matches.length+" similar item"+(matches.length===1?"":"s")+" in "+candidate.category.toLowerCase()+". "):("You don't own anything yet in "+candidate.category.toLowerCase()+" to compare it against. ");
-      note+=sus?("Its fabric mix rates as <b>"+sus.tier+"</b> ("+sus.score+"/100) — "+dominantFabricNote(candidate.fabric)+" "):"No fabric composition was entered, so a sustainability score couldn't be calculated. ";
-      note+=s.unlocked>0?("It would unlock roughly "+s.unlocked+" new outfit combination"+(s.unlocked===1?"":"s")+" with your current closet."):"It doesn't appear to unlock any new outfit combinations based on what's in your closet.";
-      body+='<div class="advisor-note">'+note+'</div>';
-    }else{
-      body='<div style="font-size:12px;color:var(--muted)">Choose a wishlist item to compare it against similar things you already own.</div>';
-    }
-    panel.innerHTML='<div class="compare-title-row"><div class="compare-title">Compare against your closet</div>'+toggleHtml+'</div>'+
-      '<select class="compare-select" id="compare-closet-picker">'+wOpts+'</select>'+body;
-  }
-}
-
-/* ---------- CHECKLIST ---------- */
-function renderChecklist(){
-  var el=document.getElementById("checklist-body");
-  if(!state.wishlist.length){el.innerHTML='<div style="font-size:12px;color:var(--muted)">No wishlist items yet</div>';return;}
-  var closetCats=state.closet.map(function(c){return c.category;});
-  el.innerHTML=state.wishlist.map(function(item){
-    var synth=Math.round(pctByType(item,"synthetic"));
-    var cpw=costPerWear(item);
-    var isGap=closetCats.indexOf(item.category)===-1;
-    return '<div class="checklist-item">'+
-      '<div style="font-size:16px">'+itemThumb(item)+'</div>'+
-      '<div style="flex:1"><div class="check-name">'+escapeHtml(item.name)+' <span style="font-size:11px;color:var(--muted)">· '+fmtMoney(item.price)+'</span></div>'+
-      '<div class="check-row">'+
-        '<span class="check-tag '+(synth===0?"good":"warn")+'">'+(synth===0?"All natural/semi":synth+"% synthetic")+'</span>'+
-        '<span class="check-tag '+(cpw<=2?"good":"warn")+'">'+fmtMoney(cpw)+'/wear</span>'+
-        '<span class="check-tag '+(isGap?"good":"")+'">'+(isGap?"New category":"Duplicates "+item.category)+'</span>'+
-      '</div></div>'+
-      '<div class="check-decision"><select class="mini" data-decision="'+item.id+'">'+
-        ["","buy","wait","skip"].map(function(v){return '<option value="'+v+'"'+(item.decision===v?" selected":"")+'>'+(v?v.charAt(0).toUpperCase()+v.slice(1):"Decide…")+'</option>';}).join("")+
-      '</select></div></div>';
-  }).join("");
-}
-
-/* ---------- SUSTAINABILITY SIDEBAR ---------- */
-function renderSustainability(){
-  var items=state.closet;
-  if(!items.length){
-    document.getElementById("sust-score").textContent="—";
-    document.getElementById("sust-label").textContent="Add closet items to see your fabric breakdown";
-    document.getElementById("sust-bars").innerHTML="";
-    return;
-  }
-  var fabMap={};
-  items.forEach(function(item){(item.fabric||[]).forEach(function(f){
-    if(!fabMap[f.fiber])fabMap[f.fiber]={total:0,type:(FABRIC_DATA[f.fiber]||{}).type||"natural"};
-    fabMap[f.fiber].total+=f.percent||0;
-  });});
-  var avgByFab=Object.keys(fabMap).map(function(n){return {n:n,avg:Math.round(fabMap[n].total/items.length),t:fabMap[n].type};}).sort(function(a,b){return b.avg-a.avg;});
-  var avgScore=Math.round(items.reduce(function(a,i){var s=computeSustainability(i.fabric);return a+(s?s.score:50);},0)/items.length);
-  var ring=document.getElementById("sust-ring");
-  ring.style.borderColor=avgScore>=70?"var(--sage)":avgScore>=45?"var(--slate)":"var(--terra)";
-  document.getElementById("sust-score").textContent=avgScore;
-  document.getElementById("sust-label").textContent=avgScore>=70?"Great fabric choices":avgScore>=45?"Room to improve":"Consider more natural or semi-synthetic fibers";
-  document.getElementById("sust-bars").innerHTML=avgByFab.slice(0,6).map(function(f){
-    var color=f.t==="synthetic"?"var(--terra)":f.t==="semi"?"var(--slate)":"var(--sage)";
-    return '<div class="sust-bar-row"><span class="sust-name">'+escapeHtml(f.n)+'</span><div class="sust-track"><div class="sust-fill" style="width:'+f.avg+'%;background:'+color+'"></div></div><span class="sust-pct" style="color:'+color+'">'+f.avg+'%</span></div>';
-  }).join("");
-}
-
-/* ---------- CPW CALCULATOR ---------- */
-function updateCPW(){
-  var price=parseInt(document.getElementById("cpw-price").value,10);
-  var wears=parseInt(document.getElementById("cpw-wears").value,10);
-  var years=parseInt(document.getElementById("cpw-years").value,10);
-  document.getElementById("cpw-price-val").textContent="$"+price;
-  document.getElementById("cpw-wears-val").textContent=wears+"×";
-  document.getElementById("cpw-years-val").textContent=years+" yr";
-  document.getElementById("cpw-result").textContent=fmtMoney(price/(wears*years));
-}
-function populateCpwLoad(){
-  var sel=document.getElementById("cpw-item-load");
-  sel.innerHTML='<option value="">Load an item…</option>'+allItems().map(function(i){return '<option value="'+i.id+'">'+escapeHtml(i.name)+' ('+(i.status==="closet"?"closet":"wishlist")+')</option>';}).join("");
-}
-
-/* ---------- OUTFIT BOARD ---------- */
-var boardItems=[];
-var board=document.getElementById("outfit-board");
-function renderBoard(){
-  document.getElementById("board-empty").style.display=boardItems.length?"none":"flex";
-  Array.from(board.querySelectorAll(".board-chip")).forEach(function(c){c.remove();});
-  boardItems.forEach(function(bi){
-    var item=findItem(bi.id);if(!item)return;
-    var chip=document.createElement("div");
-    chip.className="board-chip"+(item.status==="wishlist"?" wishlist-piece":"");
-    chip.style.left=bi.x+"px";chip.style.top=bi.y+"px";
-    chip.innerHTML='<button class="remove" data-remove-chip>&times;</button><div class="thumb">'+itemThumb(item)+'</div><div class="label">'+escapeHtml((item.name||"").slice(0,13))+'</div>';
-    board.appendChild(chip);
-    makeChipDraggable(chip,bi);
-  });
-  renderOutfitStats();
-}
-function makeChipDraggable(chip,bi){
-  var dragging=false,offX=0,offY=0;
-  chip.addEventListener("pointerdown",function(e){
-    if(e.target.hasAttribute("data-remove-chip"))return;
-    dragging=true;chip.setPointerCapture(e.pointerId);
-    var rect=board.getBoundingClientRect();
-    offX=e.clientX-rect.left-bi.x;offY=e.clientY-rect.top-bi.y;
-  });
-  chip.addEventListener("pointermove",function(e){
-    if(!dragging)return;
-    var rect=board.getBoundingClientRect();
-    bi.x=Math.max(0,Math.min(rect.width-70,e.clientX-rect.left-offX));
-    bi.y=Math.max(0,Math.min(rect.height-84,e.clientY-rect.top-offY));
-    chip.style.left=bi.x+"px";chip.style.top=bi.y+"px";
-  });
-  chip.addEventListener("pointerup",function(){dragging=false;});
-  chip.querySelector("[data-remove-chip]").addEventListener("click",function(){
-    boardItems=boardItems.filter(function(b){return b.uid!==bi.uid;});
-    renderBoard();
-  });
-}
-function addToBoard(id){
-  if(boardItems.find(function(b){return b.id===id;}))return;
-  boardItems.push({uid:uid(),id:id,x:20+Math.random()*(board.clientWidth?board.clientWidth-100:100),y:20+Math.random()*80});
-  renderBoard();
-}
-function renderOutfitStats(){
-  var pieces=boardItems.map(function(b){return findItem(b.id);}).filter(Boolean);
-  var old=document.getElementById("outfit-stats");
-  if(old)old.remove();
-  if(!pieces.length)return;
-  var totalCost=pieces.reduce(function(a,p){return a+(p.price||0);},0);
-  var synthAvg=Math.round(pieces.reduce(function(a,p){return a+pctByType(p,"synthetic");},0)/pieces.length);
-  var wishCount=pieces.filter(function(p){return p.status==="wishlist";}).length;
-  var div=document.createElement("div");
-  div.className="outfit-stats";div.id="outfit-stats";
-  div.innerHTML='<div class="outfit-stat-row"><span class="outfit-stat-label">Pieces in outfit</span><span class="outfit-stat-val">'+pieces.length+'</span></div>'+
-    '<div class="outfit-stat-row"><span class="outfit-stat-label">Total outfit value</span><span class="outfit-stat-val">'+fmtMoney(totalCost)+'</span></div>'+
-    '<div class="outfit-stat-row"><span class="outfit-stat-label">Synthetic fibers</span><span class="outfit-stat-val '+(synthAvg>30?"warn":"good")+'">'+synthAvg+'%</span></div>'+
-    (wishCount?'<div class="outfit-stat-row"><span class="outfit-stat-label">Wishlist items trying</span><span class="outfit-stat-val" style="color:var(--slate)">'+wishCount+'</span></div>':"");
-  board.insertAdjacentElement("afterend",div);
-}
-function renderSavedOutfits(){
-  var el=document.getElementById("saved-outfits");
-  if(!state.outfits.length){el.innerHTML="";document.getElementById("strip-count-right").textContent="0";return;}
-  document.getElementById("strip-count-right").textContent=state.outfits.length;
-  el.innerHTML='<div style="font-size:10px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Saved outfits</div>'+
-    state.outfits.slice(-6).reverse().map(function(o){
-      var items=o.itemIds.map(findItem).filter(Boolean);
-      return '<div class="saved-outfit-row"><span style="font-weight:500">'+escapeHtml(o.name)+'</span><span class="saved-outfit-pieces">'+items.length+' pcs</span><button class="wish-btn" data-load-outfit="'+o.id+'">Load</button><button class="wish-btn" data-delete-outfit="'+o.id+'">×</button></div>';
-    }).join("");
-}
-
-/* ---------- ANALYTICS ---------- */
-function renderPie(natPct,semiPct,synPct){
-  var total=natPct+semiPct+synPct||1;
-  var segs=[{v:natPct,c:"var(--lav-light)",label:"Natural"},{v:semiPct,c:"var(--lav-mid)",label:"Semi-synthetic"},{v:synPct,c:"var(--lav-dark)",label:"Synthetic"}];
-  var r=52,circ=2*Math.PI*r,offset=0;
-  var circles=segs.map(function(s){
-    var frac=s.v/total;
-    var dash=frac*circ;
-    var c='<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+s.c+'" stroke-width="20" stroke-dasharray="'+dash+' '+(circ-dash)+'" stroke-dashoffset="'+(-offset)+'" transform="rotate(-90 60 60)"></circle>';
-    offset+=dash;
-    return c;
-  }).join("");
-  var svg='<svg width="120" height="120" viewBox="0 0 120 120">'+circles+'</svg>';
-  var legend='<div class="pie-legend">'+segs.map(function(s){return '<div class="pie-legend-row"><span class="pie-swatch" style="background:'+s.c+'"></span><span class="name">'+s.label+'</span><span class="pct">'+Math.round(s.v)+'%</span></div>';}).join("")+'</div>';
-  return '<div class="pie-wrap">'+svg+legend+'</div>';
-}
-function renderAnalytics(){
-  var el=document.getElementById("analytics-body");
-  var items=state.closet;
-  if(!items.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">Add items to your closet to see analytics.</div>';return;}
-  var totalValue=items.reduce(function(a,i){return a+(i.price||0);},0);
-  var worn=items.filter(function(i){return (i.wearLog||[]).length>0;});
-  var avgCPW=worn.length?worn.reduce(function(a,i){return a+i.price/i.wearLog.length;},0)/worn.length:0;
-  var mostWorn=worn.slice().sort(function(a,b){return b.wearLog.length-a.wearLog.length;})[0];
-  var natSum=items.reduce(function(a,i){return a+pctByType(i,"natural");},0);
-  var semiSum=items.reduce(function(a,i){return a+pctByType(i,"semi");},0);
-  var synSum=items.reduce(function(a,i){return a+pctByType(i,"synthetic");},0);
-  var natPct=Math.round(natSum/items.length),semiPct=Math.round(semiSum/items.length),synPct=Math.round(synSum/items.length);
-
-  var tiles=[
-    ["Wardrobe value","$"+totalValue.toLocaleString(),"at purchase price"],
-    ["Avg cost / wear",fmtMoney(avgCPW),"across worn items"],
-    ["Most worn",mostWorn?mostWorn.name:"—",mostWorn?mostWorn.wearLog.length+" wears":""],
-    ["Natural %",natPct+"%","plant & animal fibers"],
-    ["Semi-synthetic %",semiPct+"%","regenerated cellulose"],
-    ["Synthetic %",synPct+"%",synPct>30?"Consider natural swaps":"Good balance"]
-  ];
-  var tilesHtml='<div class="stat-tiles">'+tiles.map(function(t){return '<div class="stat-tile"><div class="l">'+t[0]+'</div><div class="v">'+escapeHtml(String(t[1]))+'</div><div class="s">'+t[2]+'</div></div>';}).join("")+'</div>';
-
-  var cpwPanel=worn.slice().sort(function(a,b){return (a.price/a.wearLog.length)-(b.price/b.wearLog.length);}).map(function(i){
-    var maxCPW=Math.max.apply(null,worn.map(function(x){return x.price/x.wearLog.length;}));
-    var val=i.price/i.wearLog.length;
-    var pct=maxCPW?Math.round(val/maxCPW*100):0;
-    return '<div class="rank-row"><span class="rname">'+escapeHtml(i.name)+'</span><div class="rtrack"><div class="rfill" style="width:'+pct+'%;background:'+(pct>60?"var(--terra)":"var(--sage)")+'"></div></div><span class="rval" style="color:'+(pct>60?"var(--terra)":"var(--sage)")+'">'+fmtMoney(val)+'</span></div>';
-  }).join("")||'<div style="font-size:12px;color:var(--muted)">Log a wear on a closet item to see this.</div>';
-
-  var maxWears=Math.max.apply(null,items.map(function(i){return (i.wearLog||[]).length;}).concat([1]));
-  var wearPanel=items.slice().sort(function(a,b){return (b.wearLog||[]).length-(a.wearLog||[]).length;}).map(function(i){
-    var w=(i.wearLog||[]).length;
-    var pct=Math.round(w/maxWears*100);
-    return '<div class="rank-row"><span class="rname">'+escapeHtml(i.name)+'</span><div class="rtrack"><div class="rfill" style="width:'+pct+'%;background:var(--slate)"></div></div><span class="rval" style="color:var(--slate)">'+w+'×</span></div>';
-  }).join("");
-
-  el.innerHTML=tilesHtml+'<div class="analytics-row">'+
-    '<div class="analytics-panel"><div class="analytics-panel-title">Fiber composition</div>'+renderPie(natPct,semiPct,synPct)+'</div>'+
-    '<div class="analytics-panel"><div class="analytics-panel-title">Cost per wear</div>'+cpwPanel+'</div>'+
-    '<div class="analytics-panel"><div class="analytics-panel-title">Wear frequency</div>'+wearPanel+'</div>'+
-    '</div>';
-}
-
-/* ---------- MODAL: form ---------- */
-var formContext={mode:"add",status:"wishlist",editingId:null,photo:null,fabricRows:[]};
-function resetForm(status,mode,item){
-  formContext={mode:mode||"add",status:status,editingId:item?item.id:null,photo:item?item.photo:null,fabricRows:item&&item.fabric?item.fabric.slice():[]};
-  document.getElementById("form-title").textContent=(mode==="edit"?"Edit item":status==="closet"?"Add to my closet":"Add to wishlist");
-  document.getElementById("autofill-section").style.display=(status==="wishlist"&&mode!=="edit")?"block":"none";
-  var msg=document.getElementById("autofill-msg");
-  msg.className="fetched-box";msg.textContent="Best effort — most retailer sites block this from a browser, so have the details ready to enter by hand.";
-  document.getElementById("autofill-url").value="";
-  document.getElementById("f-wears-field").style.display=status==="wishlist"?"block":"none";
-
-  populateSelect(document.getElementById("f-category"),CATEGORIES);
-  populateSelect(document.getElementById("f-color"),COLORS);
-  document.getElementById("f-name").value=item?item.name||"":"";
-  document.getElementById("f-category").value=item?item.category:CATEGORIES[0];
-  document.getElementById("f-brand").value=item?item.brand||"":"";
-  document.getElementById("f-price").value=item?item.price||"":"";
-  document.getElementById("f-size").value=item?item.size||"":"";
-  document.getElementById("f-wears").value=item?item.estimatedWears||CATEGORY_WEAR_DEFAULT[item.category]:CATEGORY_WEAR_DEFAULT[CATEGORIES[0]];
-  document.getElementById("f-color").value=item?item.color:COLORS[0];
-  document.getElementById("f-url").value=item?item.sourceUrl||"":"";
-  document.getElementById("f-notes").value=item?item.notes||"":"";
-
-  var seasonGroup=document.getElementById("f-season-group");
-  var sel=item?item.season||[]:[];
-  seasonGroup.innerHTML=SEASONS.map(function(s){return '<div class="checkbox-chip'+(sel.indexOf(s)>-1?" checked":"")+'" data-season="'+s+'">'+s+'</div>';}).join("");
-
-  renderPhotoPreview();renderFabricRows();
-}
-function renderPhotoPreview(){
-  var el=document.getElementById("photo-preview");
-  var btn=document.getElementById("btn-remove-photo");
-  if(formContext.photo){el.innerHTML='<img src="'+formContext.photo+'" alt="">';btn.style.display="inline-block";}
-  else{el.innerHTML='<div class="upload-text">📷 Click or drop a photo here</div>';btn.style.display="none";}
-}
-function renderFabricRows(){
-  var wrap=document.getElementById("fabric-rows");
-  wrap.innerHTML=formContext.fabricRows.map(function(row,idx){
-    var options=FABRIC_LIST.map(function(f){return '<option value="'+f+'"'+(f===row.fiber?" selected":"")+'>'+f+'</option>';}).join("");
-    return '<div class="fab-row-inputs" data-idx="'+idx+'"><select data-fabric-fiber>'+options+'</select><input type="number" min="0" max="100" data-fabric-percent value="'+(row.percent||0)+'" placeholder="%"><button type="button" class="fab-remove" data-remove-fabric>&times;</button></div>';
-  }).join("");
-  updateFabricTotal();
-}
-function updateFabricTotal(){
-  var total=formContext.fabricRows.reduce(function(a,r){return a+(Number(r.percent)||0);},0);
-  var el=document.getElementById("fabric-total");
-  el.textContent="Total: "+total+"%"+(total!==100&&formContext.fabricRows.length?" (should add up to 100%)":"");
-  el.className="fabric-total"+(total!==100&&formContext.fabricRows.length?" warn":"");
-}
-
-/* ---------- item detail ---------- */
-function openDetail(item){
-  document.getElementById("detail-title").textContent=item.name||"Untitled";
-  var sus=computeSustainability(item.fabric);
-  var photo=item.photo?'<img src="'+item.photo+'" style="width:100%;border-radius:10px;margin-bottom:12px;max-height:220px;object-fit:cover">':"";
-  var fabricList=(item.fabric||[]).map(function(f){return f.fiber+" — "+f.percent+"%";}).join("<br>")||"Not entered";
-  var wears=(item.wearLog||[]).length;
-  var body=photo+'<dl class="detail-grid">'+
-    '<dt>Brand</dt><dd>'+escapeHtml(item.brand||"—")+'</dd>'+
-    '<dt>Category</dt><dd>'+escapeHtml(item.category||"—")+'</dd>'+
-    '<dt>Color</dt><dd>'+escapeHtml(item.color||"—")+'</dd>'+
-    '<dt>Size</dt><dd>'+escapeHtml(item.size||"—")+'</dd>'+
-    '<dt>Season</dt><dd>'+escapeHtml((item.season||[]).join(", ")||"—")+'</dd>'+
-    '<dt>Price</dt><dd>'+fmtMoney(item.price)+'</dd>'+
-    '<dt>Fabric</dt><dd>'+fabricList+'</dd>'+
-    '<dt>Sustainability</dt><dd>'+(sus?sus.tier+" ("+sus.score+"/100)<br><span style=\"color:var(--muted);font-size:11.5px\">"+dominantFabricNote(item.fabric)+"</span>":"Not enough fabric data")+'</dd>'+
-    (item.sourceUrl?'<dt>Link</dt><dd><a href="'+escapeHtml(item.sourceUrl)+'" target="_blank" rel="noopener">'+escapeHtml(item.sourceUrl)+'</a></dd>':'')+
-    (item.notes?'<dt>Notes</dt><dd>'+escapeHtml(item.notes)+'</dd>':'')+
-  '</dl>';
-  if(item.status==="closet"){
-    body+='<div class="wear-log-box"><span class="count">'+wears+'</span><div style="font-size:11.5px;color:var(--muted)">time'+(wears===1?"":"s")+' logged worn · actual cost/wear: '+fmtMoney(costPerWear(item))+'</div></div>';
-  }else{
-    body+='<div class="wear-log-box"><div style="font-size:12.5px">Estimated at <b>'+(item.estimatedWears||CATEGORY_WEAR_DEFAULT[item.category])+' wears</b> → '+fmtMoney(costPerWear(item))+' per wear.</div></div>';
-  }
-  document.getElementById("detail-body").innerHTML=body;
-
-  var footer=document.getElementById("detail-footer");footer.innerHTML="";
-  footer.appendChild(mkBtn("Delete","btn btn-danger",function(){
-    confirmDialog("Delete this item?","This can't be undone unless you have an exported backup.",function(){
-      state[item.status]=state[item.status].filter(function(i){return i.id!==item.id;});
-      state.isDemo=false;saveState();renderAll();closeModal("modal-detail");notify("Item deleted.");
-    });
-  }));
-  footer.appendChild(mkBtn("Edit","btn btn-ghost",function(){closeModal("modal-detail");resetForm(item.status,"edit",item);openModal("modal-form");}));
-  if(item.status==="closet"){
-    footer.appendChild(mkBtn("I wore this today","btn btn-primary",function(){
-      item.wearLog=item.wearLog||[];item.wearLog.push(new Date().toISOString());
-      state.isDemo=false;saveState();openDetail(item);renderAll();notify("Logged a wear.");
-    }));
-  }else{
-    footer.appendChild(mkBtn("Mark as purchased","btn btn-primary",function(){purchaseItem(item.id);closeModal("modal-detail");}));
-  }
-  openModal("modal-detail");
-}
-function mkBtn(label,cls,fn){var b=document.createElement("button");b.className=cls;b.textContent=label;b.addEventListener("click",fn);return b;}
-
-function purchaseItem(id){
-  var item=findItem(id);if(!item)return;
-  state.wishlist=state.wishlist.filter(function(i){return i.id!==id;});
-  item.status="closet";item.wearLog=[];item.dateAdded=new Date().toISOString();
-  state.closet.push(item);state.isDemo=false;
-  saveState();renderAll();notify('"'+item.name+'" moved to your closet.');
-}
-
-/* ---------- modal generic ---------- */
-function openModal(id){document.getElementById(id).classList.add("open");}
-function closeModal(id){document.getElementById(id).classList.remove("open");}
-document.querySelectorAll("[data-close]").forEach(function(b){b.addEventListener("click",function(){closeModal(b.dataset.close);});});
-document.querySelectorAll(".modal-back").forEach(function(ov){ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("open");});});
-function confirmDialog(title,body,onConfirm){
-  document.getElementById("confirm-title").textContent=title;
-  document.getElementById("confirm-body").textContent=body;
-  var btn=document.getElementById("confirm-ok");
-  var fresh=btn.cloneNode(true);btn.parentNode.replaceChild(fresh,btn);
-  fresh.addEventListener("click",function(){onConfirm();closeModal("modal-confirm");});
-  openModal("modal-confirm");
-}
-
-/* ---------- events: fabric rows ---------- */
-document.getElementById("btn-add-fabric-row").addEventListener("click",function(){
-  formContext.fabricRows.push({fiber:FABRIC_LIST[0],percent:formContext.fabricRows.length?0:100});
-  renderFabricRows();
-});
-document.getElementById("fabric-rows").addEventListener("input",function(e){
-  var row=e.target.closest(".fab-row-inputs");if(!row)return;
-  var idx=Number(row.dataset.idx);
-  if(e.target.hasAttribute("data-fabric-fiber"))formContext.fabricRows[idx].fiber=e.target.value;
-  if(e.target.hasAttribute("data-fabric-percent")){formContext.fabricRows[idx].percent=Number(e.target.value);updateFabricTotal();}
-});
-document.getElementById("fabric-rows").addEventListener("click",function(e){
-  if(e.target.hasAttribute("data-remove-fabric")){
-    var row=e.target.closest(".fab-row-inputs");
-    formContext.fabricRows.splice(Number(row.dataset.idx),1);
-    renderFabricRows();
-  }
-});
-document.getElementById("f-season-group").addEventListener("click",function(e){var chip=e.target.closest(".checkbox-chip");if(chip)chip.classList.toggle("checked");});
-document.getElementById("f-category").addEventListener("change",function(){document.getElementById("f-wears").value=CATEGORY_WEAR_DEFAULT[this.value]||30;});
-
-function resizeImage(file,cb){
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var maxDim=480;var scale=Math.min(1,maxDim/Math.max(img.width,img.height));
-      var canvas=document.createElement("canvas");canvas.width=img.width*scale;canvas.height=img.height*scale;
-      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-      cb(canvas.toDataURL("image/jpeg",0.72));
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-document.getElementById("photo-input").addEventListener("change",function(e){
-  var file=e.target.files[0];if(!file)return;
-  resizeImage(file,function(dataUrl){formContext.photo=dataUrl;renderPhotoPreview();});
-});
-document.getElementById("btn-remove-photo").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();formContext.photo=null;renderPhotoPreview();document.getElementById("photo-input").value="";});
-
-document.getElementById("btn-try-autofill").addEventListener("click",function(){
-  var url=document.getElementById("autofill-url").value.trim();
-  var msg=document.getElementById("autofill-msg");
-  if(!url){msg.className="fetched-box show error";msg.textContent="Paste a product URL first.";return;}
-  msg.className="fetched-box show";msg.textContent="Trying to fetch product details…";
-  document.getElementById("f-url").value=url;
-  fetch(url,{mode:"cors"}).then(function(r){return r.text();}).then(function(html){
-    var doc=new DOMParser().parseFromString(html,"text/html");
-    function meta(n){var el=doc.querySelector('meta[property="'+n+'"], meta[name="'+n+'"]');return el?el.getAttribute("content"):null;}
-    var title=meta("og:title")||(doc.querySelector("title")?doc.querySelector("title").textContent:null);
-    var priceRaw=meta("product:price:amount")||meta("og:price:amount");
-    var image=meta("og:image");
-    var found=false;
-    if(title){document.getElementById("f-name").value=title.trim();found=true;}
-    if(priceRaw){document.getElementById("f-price").value=parseFloat(priceRaw)||"";found=true;}
-    if(image){formContext.photo=image;renderPhotoPreview();found=true;}
-    if(found){msg.className="fetched-box show";msg.textContent="Pulled what we could — please double-check every field, then fill in the rest by hand.";}
-    else{msg.className="fetched-box show error";msg.textContent="That page loaded but didn't expose usable product data. Please fill in the details manually.";}
-  }).catch(function(){
-    msg.className="fetched-box show error";
-    msg.textContent="Auto-fill isn't available for this site — most retailers block this kind of request from a browser. Please fill in the details below.";
-  });
-});
-
-document.getElementById("btn-save-item").addEventListener("click",function(){
-  var name=document.getElementById("f-name").value.trim();
-  if(!name){notify("Give the item a name first.");return;}
-  var seasons=Array.from(document.querySelectorAll("#f-season-group .checkbox-chip.checked")).map(function(c){return c.dataset.season;});
-  var cat=document.getElementById("f-category").value;
-  var item={
-    id:formContext.editingId||uid(),
-    name:name,category:cat,
-    brand:document.getElementById("f-brand").value.trim(),
-    price:parseFloat(document.getElementById("f-price").value)||0,
-    size:document.getElementById("f-size").value.trim(),
-    color:document.getElementById("f-color").value,
-    season:seasons,
-    fabric:formContext.fabricRows.filter(function(r){return r.percent>0;}),
-    photo:formContext.photo,
-    sourceUrl:document.getElementById("f-url").value.trim(),
-    notes:document.getElementById("f-notes").value.trim(),
-    estimatedWears:parseInt(document.getElementById("f-wears").value,10)||CATEGORY_WEAR_DEFAULT[cat]||30,
-    status:formContext.status,
-    decision:""
-  };
-  if(formContext.mode==="edit"){
-    var list=state[formContext.status];
-    var idx=list.findIndex(function(i){return i.id===formContext.editingId;});
-    if(idx>-1)list[idx]=Object.assign({},list[idx],item,{dateAdded:list[idx].dateAdded,wearLog:list[idx].wearLog,decision:list[idx].decision});
-  }else{
-    item.dateAdded=new Date().toISOString();item.wearLog=[];
-    state[formContext.status].push(item);
-  }
-  state.isDemo=false;
-  saveState();renderAll();closeModal("modal-form");
-  notify(formContext.mode==="edit"?"Item updated.":"Item added.");
-});
-
-/* ---------- open add flows ---------- */
-document.getElementById("btn-open-closet").addEventListener("click",function(){resetForm("closet","add");openModal("modal-form");});
-document.getElementById("btn-open-wishlist").addEventListener("click",function(){resetForm("wishlist","add");openModal("modal-form");});
-document.getElementById("btn-open-wishlist-2").addEventListener("click",function(){resetForm("wishlist","add");openModal("modal-form");});
-
-/* ---------- closet/wishlist interactions ---------- */
-document.getElementById("closet-list").addEventListener("click",function(e){
-  var el=e.target.closest(".closet-item");if(!el)return;
-  var item=findItem(el.dataset.id);if(item)openDetail(item);
-});
-document.getElementById("wishlist-grid").addEventListener("click",function(e){
-  if(e.target.dataset.toggleCompare){
-    var id=e.target.dataset.toggleCompare;
-    var idx=state.compareSelection.indexOf(id);
-    if(idx>-1)state.compareSelection.splice(idx,1);
-    else{if(state.compareSelection.length>=3)state.compareSelection.shift();state.compareSelection.push(id);}
-    saveState();renderWishlist();if(document.getElementById("compare-panel").style.display!=="none")renderCompare();
-    return;
-  }
-  if(e.target.dataset.removeWish){
-    state.wishlist=state.wishlist.filter(function(i){return i.id!==e.target.dataset.removeWish;});
-    state.isDemo=false;saveState();renderAll();notify("Removed from wishlist");return;
-  }
-  if(e.target.dataset.purchase){purchaseItem(e.target.dataset.purchase);return;}
-  if(e.target.dataset.tryOutfit){addToBoard(e.target.dataset.tryOutfit);notify("Added to outfit builder");return;}
-  var card=e.target.closest(".wish-card");if(!card)return;
-  var item=findItem(card.dataset.id);if(item)openDetail(item);
-});
-
-/* ---------- filters ---------- */
-["closet-search","closet-filter-category","closet-filter-color","closet-filter-season"].forEach(function(id){document.getElementById(id).addEventListener("input",renderCloset);});
-["wishlist-search","wishlist-filter-category"].forEach(function(id){document.getElementById(id).addEventListener("input",renderWishlist);});
-
-/* ---------- compare / checklist toggles ---------- */
-document.getElementById("btn-compare").addEventListener("click",function(){
-  var panel=document.getElementById("compare-panel");
-  var show=panel.style.display==="none";
-  panel.style.display=show?"block":"none";
-  if(show)renderCompare();
-});
-document.getElementById("btn-checklist").addEventListener("click",function(){
-  var panel=document.getElementById("checklist-panel");
-  var show=panel.style.display==="none";
-  panel.style.display=show?"block":"none";
-  if(show)renderChecklist();
-});
-document.getElementById("compare-panel").addEventListener("click",function(e){
-  if(e.target.dataset.mode){state.compareMode=e.target.dataset.mode;saveState();renderCompare();}
-});
-document.getElementById("compare-panel").addEventListener("change",function(e){
-  if(e.target.id==="compare-closet-picker"){state.compareClosetId=e.target.value;saveState();renderCompare();}
-});
-document.getElementById("checklist-panel").addEventListener("change",function(e){
-  if(e.target.dataset.decision){
-    var item=findItem(e.target.dataset.decision);
-    if(item){item.decision=e.target.value;state.isDemo=false;saveState();notify("Decision saved");}
-  }
-});
-
-/* ---------- outfit board interactions ---------- */
-document.addEventListener("dragstart",function(e){
-  var el=e.target.closest("[data-drag-id]");
-  if(el)e.dataTransfer.setData("text/plain",el.dataset.dragId);
-});
-board.addEventListener("dragover",function(e){e.preventDefault();});
-board.addEventListener("drop",function(e){
-  e.preventDefault();
-  var id=e.dataTransfer.getData("text/plain");
-  if(!id)return;
-  var rect=board.getBoundingClientRect();
-  boardItems.push({uid:uid(),id:id,x:Math.max(0,e.clientX-rect.left-35),y:Math.max(0,e.clientY-rect.top-42)});
-  renderBoard();
-});
-document.getElementById("btn-clear-board").addEventListener("click",function(){boardItems=[];renderBoard();document.getElementById("outfit-name").value="";});
-document.getElementById("btn-save-outfit").addEventListener("click",function(){
-  if(!boardItems.length){notify("Add a few pieces to the board first.");return;}
-  var name=document.getElementById("outfit-name").value.trim()||"Untitled outfit";
-  state.outfits.push({id:uid(),name:name,itemIds:boardItems.map(function(b){return b.id;}),dateCreated:new Date().toISOString()});
-  state.isDemo=false;saveState();
-  boardItems=[];renderBoard();document.getElementById("outfit-name").value="";
-  renderSavedOutfits();notify("Outfit saved.");
-});
-document.getElementById("saved-outfits").addEventListener("click",function(e){
-  if(e.target.dataset.deleteOutfit){
-    state.outfits=state.outfits.filter(function(o){return o.id!==e.target.dataset.deleteOutfit;});
-    state.isDemo=false;saveState();renderSavedOutfits();return;
-  }
-  if(e.target.dataset.loadOutfit){
-    var o=state.outfits.find(function(x){return x.id===e.target.dataset.loadOutfit;});
-    if(!o)return;
-    boardItems=o.itemIds.map(function(id,i){return {uid:uid(),id:id,x:20+(i%4)*90,y:20+Math.floor(i/4)*95};});
-    document.getElementById("outfit-name").value=o.name;
-    renderBoard();notify("Loaded onto the board — save again to update.");
-  }
-});
-
-/* ---------- CPW calc events ---------- */
-["cpw-price","cpw-wears","cpw-years"].forEach(function(id){document.getElementById(id).addEventListener("input",updateCPW);});
-document.getElementById("cpw-item-load").addEventListener("change",function(){
-  var item=findItem(this.value);
-  if(item){document.getElementById("cpw-price").value=Math.min(800,Math.max(10,Math.round(item.price)));updateCPW();}
-});
-
-/* ---------- panel expand/collapse ---------- */
-var expandedPanel=null;
-function applyExpand(){
-  var ws=document.getElementById("workspace");
-  ws.classList.remove("exp-closet","exp-centre","exp-right");
-  ["panel-closet","panel-centre","panel-right"].forEach(function(id){document.getElementById(id).classList.remove("is-expanded");});
-  if(expandedPanel){
-    ws.classList.add("exp-"+expandedPanel);
-    document.getElementById("panel-"+expandedPanel).classList.add("is-expanded");
-  }
-}
-document.querySelectorAll("[data-expand]").forEach(function(btn){
-  btn.addEventListener("click",function(){
-    var key=btn.dataset.expand;
-    expandedPanel=(expandedPanel===key)?null:key;
-    applyExpand();
-    btn.textContent=expandedPanel===key?"⤡":"⤢";
-  });
-});
-document.querySelectorAll("[data-strip]").forEach(function(strip){
-  strip.addEventListener("click",function(){
-    expandedPanel=strip.dataset.strip;
-    applyExpand();
-  });
-});
-
-/* ---------- demo banner ---------- */
-document.getElementById("btn-clear-demo").addEventListener("click",function(){
-  confirmDialog("Clear demo data?","This removes all demo closet, wishlist, and outfit items so you can start fresh with your own.",function(){
-    state={closet:[],wishlist:[],outfits:[],isDemo:false,compareMode:"wishlist",compareSelection:[],compareClosetId:""};
-    saveState();renderAll();updateDemoBanner();notify("Demo data cleared.");
-  });
-});
-function updateDemoBanner(){document.getElementById("demo-banner").style.display=state.isDemo?"flex":"none";}
-
-/* ---------- export / import ---------- */
-document.getElementById("btn-export").addEventListener("click",function(){
-  var blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-  var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="cart-and-closet-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();
-  notify("Backup downloaded.");
-});
-document.getElementById("import-input").addEventListener("change",function(e){
-  var file=e.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(evt){
-    try{
-      var parsed=JSON.parse(evt.target.result);
-      confirmDialog("Replace current data?","Importing this backup will replace everything currently in your closet, wishlist, and outfits.",function(){
-        state=Object.assign({closet:[],wishlist:[],outfits:[],isDemo:false,compareMode:"wishlist",compareSelection:[],compareClosetId:""},parsed);
-        saveState();renderAll();updateDemoBanner();notify("Backup imported.");
-      });
-    }catch(err){notify("That file doesn't look like a valid backup.");}
-  };
-  reader.readAsText(file);e.target.value="";
-});
-
-/* ---------- top nav pages ---------- */
-document.querySelectorAll(".nav-tab").forEach(function(btn){
-  btn.addEventListener("click",function(){
-    document.querySelectorAll(".nav-tab").forEach(function(b){b.classList.toggle("active",b===btn);});
-    var page=btn.dataset.page;
-    document.getElementById("page-planner").style.display=page==="planner"?"contents":"none";
-    document.getElementById("page-analytics").style.display=page==="analytics"?"block":"none";
-    if(page==="analytics")renderAnalytics();
-  });
-});
-
-/* ---------- init ---------- */
-function renderAll(){
-  renderCloset();renderWishlist();renderSavedOutfits();populateCpwLoad();
-  if(document.getElementById("compare-panel").style.display!=="none")renderCompare();
-  if(document.getElementById("checklist-panel").style.display!=="none")renderChecklist();
-  if(document.getElementById("page-analytics").style.display!=="none")renderAnalytics();
-}
-
-loadState();
-initFilters();
-updateDemoBanner();
-renderAll();
-renderBoard();
-updateCPW();
-
-})();
-</script>
+<script defer src="js/data.js"></script>
+<script defer src="js/fabrics.js"></script>
+<script defer src="js/util.js"></script>
+<script defer src="js/store.js"></script>
+<script defer src="js/demo.js"></script>
+<script defer src="js/scoring.js"></script>
+<script defer src="js/photos.js"></script>
+<script defer src="js/form.js"></script>
+<script defer src="js/detail.js"></script>
+<script defer src="js/closet.js"></script>
+<script defer src="js/wishlist.js"></script>
+<script defer src="js/outfit.js"></script>
+<script defer src="js/analytics.js"></script>
+<script defer src="js/app.js"></script>
 </body>
 </html>

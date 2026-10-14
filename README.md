@@ -8,103 +8,88 @@ A free, browser-based pre-purchase wardrobe decision tool. Before you check out,
 
 ## ✨ Features at a Glance
 
-- 🖥️ **All-in-one dashboard** — Closet, Wishlist, and Outfit Builder live side by side on one screen (like the reference garden-planner tool), and each panel can expand to fill the view while the other two collapse into thin strips you click to switch back
-- 🧺 **Digital closet twin** — catalog what you already own (excluding basics like socks/underwear), browsable by category, color, and season
-- 🛒 **Wishlist ("the cart")** — add things you're considering buying, with manual entry plus a best-effort auto-fill from a product URL
-- ⚖️ **Compare** — toggle between comparing wishlist items against each other, or one wishlist item against similar things you already own
-- ✅ **Decision checklist** — a running list of your wishlist items with quick tags (synthetic %, cost/wear, new-category-or-duplicate) and a manual Buy / Wait / Skip choice you set yourself
-- 👗 **Outfit value scoring** — an estimated count of new outfit combinations a candidate item would create with your current closet, shown as one of three score bars on every wishlist card (alongside sustainability and cost/wear)
-- 🎨 **Drag-and-drop outfit builder** — a freeform board for arranging and saving specific outfits from your closet + wishlist
-- 🧮 **Cost-per-wear calculator** — a "what if" slider playground (price / wears-per-year / years owned), which can also load a real item's price to start from
-- 🌱 **Fabric sustainability scoring** — automatic score from ~38 fibers (organic cotton, hemp, linen, wool, alpaca, cashmere, silk, polyester, nylon, TENCEL™/lyocell, recycled fibers, and more), based on real water-use, biodegradability, and microplastic data
-- 📊 **Analytics page** — wardrobe value, average cost/wear, most-worn item, and a Natural / Semi-synthetic / Synthetic fiber breakdown with a donut chart, plus ranked cost-per-wear and wear-frequency charts
-- 💾 **Auto-save + manual backup** — your data is saved in this browser automatically; export a `.json` backup anytime to move it elsewhere or keep a copy
-- 📱 **Mobile-friendly** — built desktop-first as a dashboard, and stacks into a single scrolling column on phones
+- 🖥️ **All-in-one dashboard** — Closet, Wishlist Cart and Outfit Builder side by side. Every panel has an expand icon: the other two collapse into thin strips you click to switch.
+- 🧺 **Digital closet twin** — catalogue what you own (skipping socks/underwear) with 12 categories and ~100 sub-categories; filter by category, sub-category, colour and season; search by name, brand or SKU.
+- 🃏 **Flip-card closet view** — expand My Closet for a birds-eye grid of cards (Small / Medium / Large). Front: the whole photo with name and brand labels. Hover (or tap) for category, sub-category, fabric, wears and cost per wear, plus a **Full info** button.
+- 🛒 **Wishlist ("the cart")** — three score bars per item (sustainability, cost/wear, outfit value). Manual entry first, with a best-effort auto-fill from a product link.
+- ⚖️ **Compare** — wishlist vs wishlist (unlimited items, scrolls sideways) or wishlist vs closet (pick any number of items on both sides), with a written analysis for each wishlist item.
+- ✅ **Decision checklist** — tags (synthetic %, cost/wear, duplicates in sub-category and category) and a Buy / Wait / Skip choice you set yourself. The list sorts itself: undecided, Buy, Wait, Skip (A–Z within each).
+- 🎨 **Outfit Builder canvas** — a gridded canvas (like the garden planner's). Drop in closet or wishlist items; plain-background photos are automatically cut out "paper doll" style. Drag, resize, and bring forward / send back. Saved outfits live in a collapsible list as true-layout thumbnails, with a running tally.
+- 🧮 **Cost-per-wear calculator** — a "what if" slider playground that can also load a real item's price.
+- 💱 **Any currency** — prices, original prices and tailoring costs each carry their own currency (code + symbol). Totals use a main currency and exchange rates you type yourself, so the app still works offline.
+- 🌱 **Fabric sustainability scoring** — ~110 materials in a grouped dropdown (fibres, constructions, membranes, fills, vegan materials, footwear materials). Each fabric row also gets a Natural / Synthetic / Semi-synthetic tag, and "Other" lets you type anything not listed.
+- 📊 **Analytics** — three sections: **Closet Composition** (category bars, colour stacked bar and heat-maps, fibre / source / new-vs-second-hand doughnuts, items added and sold/donated), **Closet Usage** (most / least worn with photos, wear frequency, owned-vs-worn, longevity, utilization rate) and **Financial Breakdown** (total spend and value, average cost per wear, usage and spend by category, monthly/annual spend, second-hand savings).
+- 💾 **Auto-save + manual backup** — saved in this browser automatically (in IndexedDB, so photos don't hit the small localStorage limit); export a `.json` backup anytime.
+- 📱 **Mobile-friendly** — built desktop-first, stacks into one scrolling column on phones.
 
 ---
 
 ## 🚀 Getting Started
 
-The app opens with a small set of demo items already in place so the dashboard isn't empty on first look — a banner at the top lets you **Clear demo data** whenever you're ready to start adding your own.
+The app opens with demo items so the dashboard isn't empty — a banner lets you **Clear demo data** when you're ready.
 
-1. Open `index.html` in any modern browser (Chrome, Safari, Firefox, Edge), or visit the deployed GitHub Pages link.
-2. Click **+ Add closet item** and add a handful of pieces you already own — this is what everything else gets compared against.
-3. Considering a purchase? Click **+ Add to wishlist**, fill in the details (or try the auto-fill button with a product link), and estimate its fabric composition.
-4. Click **Compare** on the Wishlist Cart panel — toggle "vs Wishlist" to stack a few prospective items against each other, or "vs Closet" to check one against similar things you already own.
-5. Click **Decision list** to log a Buy / Wait / Skip call on each wishlist item, with quick tags to back it up.
-6. Drag items onto the **Outfit Builder** board (from either the Closet panel or a wishlist card's "Try on" button) to test combinations, then name and save one.
-7. Decided to buy something? Click **→ Move to closet** — it moves in, and you can start logging real wears ("I wore this today") for its actual cost per wear.
-8. Click the **Analytics** tab for a wardrobe-wide view: value, cost per wear, and your natural/semi-synthetic/synthetic fiber split.
-9. Click **Export JSON** every so often to keep a portable backup of your data.
+1. Open `index.html` in a modern browser, or visit the deployed GitHub Pages link.
+2. **+ Add closet item**: add things you own. Upload a photo (drag to frame it for cards), fill in what you know. Only name and category are required.
+3. **+ Add to wishlist** for something you're considering. Set a rough fabric composition to get a sustainability score.
+4. Use **Compare** and **Decision list** on the Wishlist Cart panel to weigh it up.
+5. Build outfits on the Outfit Builder canvas — drag from your closet list or use **Try on** on a wishlist card (on touch screens, use **Add to outfit** in an item's popup).
+6. Bought it? **→ Move to closet** — then log real wears with **I wore this today**.
+7. Open **Analytics** for the big picture, and **Export JSON** now and then for a portable backup.
 
 ---
 
-## 🗺️ Layout Overview
+## 🧠 How the numbers work
 
-The Planner page is a three-panel dashboard:
+- **Cost per wear** = (purchase price + tailoring/service care) ÷ number of wears. Wishlist items (and unworn closet items) use an estimated wear count by category, which you can edit.
+- **Total wears** = *Times worn* (wears before you started using the app) + dated "I wore this today" clicks. Utilization rate only counts dated logs.
+- **Sustainability score** = weighted average over the fabrics that can be scored. "Other" and "Unavailable" fabrics are left out, and the score tells you what share of the garment it's based on.
+- **Outfit value** counts simple top + bottom (or dress / one piece / matching set) + footwear combinations with and without the item — a rough proxy for versatility.
+- **Spend** counts purchase price for owned pieces; **gifts aren't counted as spend**. **Archived** (sold/donated) pieces are hidden by default (toggle *Show archived*) and left out of value and usage stats, but still count in "Items sold / donated" and past spending.
+- **Exchange rates** are typed by you (Analytics → Currency settings). Prices in a currency with no rate are left out of totals, with a note.
 
-### My Closet (left)
-Your digital wardrobe twin. Search and filter by category, color, or season. Each row shows a photo (or a category icon) and cost per wear once you've logged wears.
-
-### Wishlist Cart (center)
-Items you're considering, shown as cards with three score bars — Sustainability, Cost/wear, Outfit value — and an overall score chip (numbers only, no "buy this" verdict). Add manually or try the "auto-fill from URL" button — this is best-effort only: most retailer sites block browsers from reading their pages directly (a security restriction called CORS), so expect to fill most fields in by hand. **Compare** and **Decision list** toggle two panels beneath the cards.
-
-### Outfit Builder (right)
-A cost-per-wear slider calculator, a freeform drag-and-drop board for building outfits, your saved outfits, and a sustainability sidebar summarizing your closet's fabric mix with a score ring and per-fiber bars.
-
-Click the ⤢ icon in any panel's header to expand it full-width — the other two collapse into thin labeled strips along the edge; click a strip to jump to that panel instead.
-
-### Analytics (second top-level page)
-Wardrobe value, average cost per wear, your most-worn item, and a Natural / Semi-synthetic / Synthetic fiber breakdown with a donut chart, plus ranked charts for cost-per-wear and wear frequency across your closet.
-
----
-
-## 🌱 Sustainability Scoring
-
-Every item's score is a weighted average across its fabric composition, using a built-in reference table of ~38 fibers — built from real production data on water usage, pesticide/chemical inputs, biodegradability, and microplastic shedding. A 60% organic cotton / 40% elastane top, for example, is scored mostly on the cotton with a penalty for the synthetic stretch fiber.
-
-Tiers: **Excellent · Good · Middling · Poor · Very Poor**
-
-Each fiber is also tagged as **Natural**, **Semi-synthetic**, or **Synthetic** — this coarser split feeds the Analytics pie chart and the sustainability sidebar's color-coding (sage = natural, slate = semi-synthetic, terracotta = synthetic).
-
-Sources referenced when building the fiber reference table:
+### Fabric sources
+The scores for the original ~38 fibres come from these guides. Every material added after that is flagged as an **estimate** in its note — those scores are judgement calls informed by brand and trade sources, not independent lifecycle numbers.
 - [Let's Go Green — Guide to Sustainable Fabrics](https://letsgogreen.com/sustainable-textiles/guide-to-sustainable-fabrics/)
 - [GoClimate — Sustainable Textile Materials](https://www.goclimate.com/knowledge/sustainable-textile-materials)
-
-## 💵 Cost-Per-Wear Logic
-
-- **Wishlist items** get a smart default estimated wear count based on category (e.g. a top defaults to ~30 wears, a coat to ~80), which you can edit.
-- **Closet items** start on that same estimate, but once you log actual wears ("I wore this today"), cost-per-wear switches to real data: price ÷ actual wears logged.
-- The standalone **cost-per-wear calculator** in the Outfit Builder panel is a separate "what if" tool — three sliders (price, wears/year, years owned) you can play with freely, or seed from a real item's price via the "Load an item…" dropdown.
-
-## 👗 Outfit Value
-
-A lightweight proxy for versatility, not a styling engine: it counts simple top(or dress) + bottom + shoe combinations possible with vs. without the candidate item, scaled to a 0–100 bar on each wishlist card. Useful for spotting when something barely pairs with anything you own — not a guarantee of real-world outfit quality.
+- Additional context: [Quantis Naia fibre comparison](https://www.apparelsearch.com/manufacturer/fibers/naia/naia-fiber-comparison-quantis-2018-09-10.pdf), [Good On You — leather alternatives](https://goodonyou.eco/eco-friendly-leather-alternatives/), [Which? — PFAS in waterproofs](https://www.which.co.uk/news/article/pfaspfcs-where-to-shop-to-avoid-the-forever-chemicals-in-waterproof-clothing-a7dhg6Q0RCeO)
 
 ---
 
-## 💾 Save & Load
+## ⚠️ Good to know
 
-- Your closet, wishlist, outfits, and decisions **auto-save in this browser** as you go — closing the tab is safe.
-- Auto-save is tied to *this browser on this device*. Click **Export JSON** to download a portable backup — do this before clearing browser data, switching devices, or switching browsers, and use **Import JSON** to load it back in.
+- **Cut-outs** work on photos with a plain or light background (typical shop photos). Busy backgrounds can't be cut cleanly, so the full photo is shown instead — use the *Cut-out* toggle on a selected piece.
+- **HEIC** photos only load in browsers that can read them (Safari); otherwise convert to JPG/PNG.
+- **Auto-fill from a link** is best-effort: most shops block browsers from reading their pages (CORS).
+- Saved data lives in *this browser on this device*. Export a backup before clearing browser data or switching devices.
 
 ---
 
 ## 🧱 Tech Stack
 
-- **Single HTML file** — zero dependencies, no build step, no framework
-- **Vanilla JavaScript** — all logic, no libraries
-- **CSS Grid** — for the dashboard layout and card grids (no `<canvas>` — outfit building uses plain draggable elements, which is simpler and more accessible for this than pixel-based canvas rendering)
-- **LocalStorage** — for auto-save between visits
-- Works entirely offline once loaded
-
-## 📁 Project Structure
+- **Plain HTML, CSS and JavaScript** — no framework, no build step, no dependencies. Works from a double-click and deploys as-is to GitHub Pages.
+- **IndexedDB** for saved data and photos; **CSS Grid** for the layout; pointer events for the outfit canvas (no `<canvas>` element needed).
 
 ```
 cart-and-closet/
-├── index.html      # The entire app — HTML, CSS, and JS in one file
-├── CLAUDE.md        # The advisor persona this tool is built around
-└── README.md
+├── index.html          # page markup
+├── css/style.css       # all styling
+├── js/
+│   ├── data.js         # categories, sub-categories, colours, currencies
+│   ├── fabrics.js      # fabric library
+│   ├── util.js         # money, dates, dialogs, safe rich text
+│   ├── store.js        # IndexedDB storage, migration, import/export
+│   ├── demo.js         # demo data
+│   ├── scoring.js      # cost per wear, sustainability, outfit value
+│   ├── photos.js       # photo resizing and background cut-out
+│   ├── form.js         # add / edit item popup
+│   ├── detail.js       # full-info popup
+│   ├── closet.js       # closet panel + flip cards
+│   ├── wishlist.js     # wishlist, compare, decision checklist
+│   ├── outfit.js       # outfit builder canvas
+│   ├── analytics.js    # analytics page
+│   └── app.js          # start-up and wiring
+├── CLAUDE.md           # the advisor persona
+└── .github/workflows/deploy.yml
 ```
 
 ---
